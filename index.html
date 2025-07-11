@@ -36,7 +36,7 @@
     <div class="container mx-auto p-4 sm:p-6 lg:p-8">
         <header class="text-center mb-8">
             <h1 class="text-4xl font-bold text-stone-900">Registro de Campaña de Mordheim</h1>
-            <p class="text-lg text-stone-600 mt-2">El estado actual de las bandas en las desoladas calles de la Ciudad de los Condenados.</p>
+            <p class="text-lg text-stone-600 mt-2">Estado actual de las bandas en las desoladas calles de la Ciudad de los Condenados</p>
         </header>
 
         <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -125,13 +125,13 @@
             const warbandsData = [
                 { player: 'Gerard', name: 'Los Gilipollaz', faction: 'Orkos Negros', rating: 61, wins: 0, losses: 0, notes: 'Waaaaaagh!' },
                 { player: 'Gerard', name: 'Impartidoras de Fé', faction: 'Hermanas de Sigmar', rating: 76, wins: 0, losses: 0, notes: 'La luz sea con vosotros pecadores muertos' },
-                { player: 'Victor', name: 'La Tribu Rompehuesos', faction: 'Ogros', rating: 88, wins: 0, losses: 0, notes: '' },
-                { player: 'Uri', name: '', faction: '', rating: 0, wins: 0, losses: 0, notes: '' },
-                { player: 'Carles', name: '', faction: 'Elfos Oscuros', rating: 0, wins: 0, losses: 0, notes: '' },
-                { player: 'Albert', name: '', faction: 'Enanos', rating: 0, wins: 0, losses: 0, notes: '' },
-                { player: 'Taquru', name: '', faction: '', rating: 0, wins: 0, losses: 0, notes: '' },
-                { player: 'Nestor', name: '', faction: '', rating: 0, wins: 0, losses: 0, notes: '' },
-				{ player: 'Arian', name: 'Los hijastros de Beliazoth', faction: 'Cazadores de Brujas', rating: 0, wins: 0, losses: 0, notes: 'Hemos venido a Joder' },
+                { player: 'Victor', name: 'La Tribu Rompehuesos', faction: 'Ogros', rating: 88, wins: 0, losses: 0, notes: 'Abrazamos arboles...para darte con ellos!' },
+                { player: 'Uri', name: '', faction: '', rating: 0, wins: 0, losses: 0, notes: 'Si la casa está en llamas, yo chill de cojones' },
+                { player: 'Carles', name: '', faction: 'Elfos Oscuros', rating: 0, wins: 0, losses: 0, notes: 'Negro es el veneno que os vamos a dar' },
+                { player: 'Albert', name: '', faction: 'Enanos', rating: 0, wins: 0, losses: 0, notes: 'Cuando lleguemos os rebentamos, esperad!' },
+                { player: 'Taquru', name: '', faction: '', rating: 0, wins: 0, losses: 0, notes: 'Malditos seguidores del caos, solo perdonamos a las culonas' },
+                { player: 'Nestor', name: '', faction: '', rating: 0, wins: 0, losses: 0, notes: 'De frente y al lio, no nos calenteis la cabeza' },
+		{ player: 'Arian', name: 'Los hijastros de Beliazoth', faction: 'Cazadores de Brujas', rating: 77, wins: 0, losses: 0, notes: 'Hemos venido a odiar con amor' },
             ];
 
             // --- ESTADO DE LA APLICACIÓN ---
@@ -330,7 +330,7 @@
             
             function renderPerformanceChart(data) {
                 const sortedData = [...data].sort((a,b) => b.wins - a.wins).slice(0, 5);
-                const labels = sortedData.map(wb => wb.name);
+                const labels = sortedData.map(wb => wb.player);
                 
                 const chartData = {
                     labels: labels,
