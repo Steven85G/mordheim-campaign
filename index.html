@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campaña de Mordheim</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral Stone -->
+    <!-- Application Structure Plan: Un diseño de dashboard de dos columnas. La columna principal (izquierda, 2/3 del ancho) muestra la tabla de clasificación interactiva, que es la información más crítica. La columna secundaria (derecha, 1/3) contiene tarjetas de estadísticas clave y visualizaciones (gráficos) para un resumen visual rápido. Esta estructura prioriza la clasificación mientras enriquece la vista con datos contextuales, superando la usabilidad de alternar entre hojas de cálculo. La interacción se centra en filtrar la tabla y los gráficos por facción, creando una experiencia de exploración de datos unificada. -->
+    <!-- Visualization & Content Choices: 1. Tabla de Clasificación (HTML): Objetivo: Informar/Comparar. Método: Tabla HTML interactiva para una visualización clara y densa de los datos. Interacción: Filtro por facción para reducir el conjunto de datos. Justificación: Es el formato más eficaz para una lista clasificada. 2. Valor de Banda (Gráfico de Barras Horizontales - Chart.js): Objetivo: Comparar. Método: Permite una fácil comparación visual del poder relativo de cada banda. 3. Composición de Facciones (Gráfico de Anillo - Chart.js): Objetivo: Informar (Proporciones). Método: Muestra la distribución de las facciones en la campaña. 4. Resumen de Partidas (Gráfico de Barras Agrupadas - Chart.js): Objetivo: Comparar. Método: Compara directamente las Victorias, Derrotas y Empates de las bandas principales. Todas las interacciones se manejan con JS para actualizar dinámicamente tanto la tabla como los gráficos. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            max-height: 300px;
+        }
+        @media (min-width: 640px) {
+            .chart-container {
+                height: 320px;
+                max-height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-stone-100 text-stone-800">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-stone-900">Registro de Campaña de Mordheim</h1>
+            <p class="text-lg text-stone-600 mt-2">El estado actual de las bandas en las desoladas calles de la Ciudad de los Condenados.</p>
+        </header>
+
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- Columna Principal: Tabla de Clasificación -->
+            <div class="lg:col-span-2 bg-white rounded-lg shadow-md p-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+                    <h2 class="text-2xl font-bold text-stone-800 mb-3 sm:mb-0">Clasificación de Bandas</h2>
+                    <div class="flex items-center space-x-2">
+                        <label for="faction-filter" class="text-sm font-medium text-stone-600">Filtrar por facción:</label>
+                        <select id="faction-filter" class="bg-stone-50 border border-stone-300 text-stone-900 text-sm rounded-lg focus:ring-slate-500 focus:border-slate-500 block w-full sm:w-auto p-2">
+                            <option value="all">Todas las facciones</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-stone-500">
+                        <thead class="text-xs text-stone-700 uppercase bg-stone-50">
+                            <tr>
+                                <th scope="col" class="px-4 py-3 rounded-l-lg">#</th>
+                                <th scope="col" class="px-6 py-3">Banda / Jugador</th>
+                                <th scope="col" class="px-6 py-3">Facción</th>
+                                <th scope="col" class="px-6 py-3 text-center">Valor</th>
+                                <th scope="col" class="px-6 py-3 text-center" title="Victorias">V</th>
+                                <th scope="col" class="px-6 py-3 text-center" title="Derrotas">D</th>
+                                <th scope="col" class="px-6 py-3 text-center rounded-r-lg" title="Partidas Totales">PT</th>
+                            </tr>
+                        </thead>
+                        <tbody id="warbands-table-body">
+                            <!-- Las filas se insertarán aquí dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+                 <p id="no-results" class="text-center text-stone-500 mt-8 hidden">No se encontraron bandas para la facción seleccionada.</p>
+            </div>
+
+            <!-- Columna Secundaria: Dashboard y Gráficos -->
+            <aside class="space-y-8">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                     <h3 class="text-xl font-bold text-stone-800 mb-4">Estadísticas de la Campaña</h3>
+                     <p class="text-sm text-stone-600 mb-4">Un resumen visual del estado de la campaña. Usa el filtro para explorar los datos por facción.</p>
+                     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-4 text-center">
+                         <div class="bg-stone-50 p-3 rounded-lg">
+                             <p class="text-2xl font-bold text-slate-700" id="total-warbands">-</p>
+                             <p class="text-xs font-medium text-stone-500 uppercase">Bandas</p>
+                         </div>
+                         <div class="bg-stone-50 p-3 rounded-lg">
+                             <p class="text-2xl font-bold text-slate-700" id="total-games">-</p>
+                             <p class="text-xs font-medium text-stone-500 uppercase">Partidas</p>
+                         </div>
+                         <div class="bg-stone-50 p-3 rounded-lg col-span-2 sm:col-span-1 lg:col-span-2">
+                             <p class="text-2xl font-bold text-slate-700" id="avg-rating">-</p>
+                             <p class="text-xs font-medium text-stone-500 uppercase">Valor Medio</p>
+                         </div>
+                     </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold text-stone-800 mb-2">Ranking por Valor de Banda</h3>
+                    <div class="chart-container">
+                        <canvas id="rating-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold text-stone-800 mb-2">Composición de Facciones</h3>
+                     <div class="chart-container">
+                        <canvas id="faction-chart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold text-stone-800 mb-2">Rendimiento en Batalla (Top 5)</h3>
+                     <div class="chart-container">
+                        <canvas id="performance-chart"></canvas>
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- DATOS DE LA CAMPAÑA (reemplazar con datos reales) ---
+            const warbandsData = [
+                { player: 'Gerard', name: 'Los Gilipollaz', faction: 'Orkos Negros', rating: 61, wins: 0, losses: 0, notes: 'Waaaaaagh!' },
+                { player: 'Gerard', name: 'Impartidoras de Fé', faction: 'Hermanas de Sigmar', rating: 76, wins: 0, losses: 0, notes: 'La luz sea con vosotros pecadores muertos' },
+                { player: 'Victor', name: '', faction: 'Ogros', rating: 0, wins: 0, losses: 0, notes: '' },
+                { player: 'Uri', name: '', faction: '', rating: 0, wins: 0, losses: 0, notes: '' },
+                { player: 'Carles', name: '', faction: 'Elfos Oscuros', rating: 0, wins: 0, losses: 0, notes: '' },
+                { player: 'Albert', name: '', faction: '', rating: 0, wins: 0, losses: 0, notes: '' },
+                { player: 'Taquru', name: '', faction: '', rating: 0, wins: 0, losses: 0, notes: '' },
+                { player: 'Nestor', name: '', faction: '', rating: 0, wins: 0, losses: 0, notes: '' },
+            ];
+
+            // --- ESTADO DE LA APLICACIÓN ---
+            let ratingChart, factionChart, performanceChart;
+            const factionFilter = document.getElementById('faction-filter');
+            const tableBody = document.getElementById('warbands-table-body');
+            const noResultsMessage = document.getElementById('no-results');
+
+            // --- INICIALIZACIÓN ---
+            function init() {
+                populateFactionFilter();
+                factionFilter.addEventListener('change', render);
+                render();
+            }
+
+            // --- FUNCIONES DE RENDERIZADO ---
+            function render() {
+                const filteredData = getFilteredData();
+                renderTable(filteredData);
+                updateDashboardStats(filteredData);
+                renderCharts(filteredData);
+            }
+            
+            function getFilteredData() {
+                const selectedFaction = factionFilter.value;
+                if (selectedFaction === 'all') {
+                    return [...warbandsData];
+                }
+                return warbandsData.filter(wb => wb.faction === selectedFaction);
+            }
+
+            function populateFactionFilter() {
+                const factions = [...new Set(warbandsData.map(wb => wb.faction))];
+                factions.sort().forEach(faction => {
+                    const option = document.createElement('option');
+                    option.value = faction;
+                    option.textContent = faction;
+                    factionFilter.appendChild(option);
+                });
+            }
+
+            function renderTable(data) {
+                tableBody.innerHTML = '';
+                
+                if(data.length === 0){
+                    noResultsMessage.classList.remove('hidden');
+                    return;
+                }
+                noResultsMessage.classList.add('hidden');
+
+                const sortedData = data.sort((a, b) => {
+                    const totalGamesA = a.wins + a.losses;
+                    const totalGamesB = b.wins + b.losses;
+                    
+                    if (b.wins !== a.wins) return b.wins - a.wins;
+                    if (totalGamesB !== totalGamesA) return totalGamesB - totalGamesA;
+                    return b.rating - a.rating;
+                });
+
+                sortedData.forEach((wb, index) => {
+                    const totalGames = wb.wins + wb.losses;
+                    const row = document.createElement('tr');
+                    row.className = 'bg-white border-b hover:bg-stone-50';
+                    row.innerHTML = `
+                        <td class="px-4 py-4 font-medium text-stone-900">${index + 1}</td>
+                        <td class="px-6 py-4">
+                            <div class="font-bold">${wb.name}</div>
+                            <div class="text-xs text-stone-500">${wb.player}</div>
+                        </td>
+                        <td class="px-6 py-4">${wb.faction}</td>
+                        <td class="px-6 py-4 text-center">${wb.rating}</td>
+                        <td class="px-6 py-4 text-center font-bold text-green-600">${wb.wins}</td>
+                        <td class="px-6 py-4 text-center font-bold text-red-600">${wb.losses}</td>
+                        <td class="px-6 py-4 text-center font-bold">${totalGames}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            function updateDashboardStats(data) {
+                const totalWarbands = data.length;
+                const totalGames = data.reduce((acc, wb) => acc + wb.wins + wb.losses + wb.draws, 0);
+                const totalRating = data.reduce((acc, wb) => acc + wb.rating, 0);
+                const avgRating = totalWarbands > 0 ? Math.round(totalRating / totalWarbands) : 0;
+                
+                document.getElementById('total-warbands').textContent = totalWarbands;
+                document.getElementById('total-games').textContent = totalGames;
+                document.getElementById('avg-rating').textContent = avgRating;
+            }
+
+            // --- FUNCIONES DE GRÁFICOS ---
+            function renderCharts(data) {
+                renderRatingChart(data);
+                renderFactionChart(warbandsData); // Faction chart always shows all data
+                renderPerformanceChart(data);
+            }
+
+            function renderRatingChart(data) {
+                const sortedData = [...data].sort((a, b) => b.rating - a.rating);
+                const labels = sortedData.map(wb => wb.name);
+                const ratings = sortedData.map(wb => wb.rating);
+
+                const chartData = {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Valor de Banda',
+                        data: ratings,
+                        backgroundColor: 'rgba(71, 85, 105, 0.7)',
+                        borderColor: 'rgba(71, 85, 105, 1)',
+                        borderWidth: 1
+                    }]
+                };
+
+                if (ratingChart) ratingChart.destroy();
+                ratingChart = new Chart(document.getElementById('rating-chart'), {
+                    type: 'bar',
+                    data: chartData,
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `Valor: ${context.raw}`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: { beginAtZero: true },
+                            y: {
+                                ticks: {
+                                    autoSkip: false,
+                                    callback: function(value, index, values) {
+                                        const label = this.getLabelForValue(value);
+                                        return label.length > 20 ? label.substring(0, 20) + '...' : label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            function renderFactionChart(data) {
+                const factionCounts = data.reduce((acc, wb) => {
+                    acc[wb.faction] = (acc[wb.faction] || 0) + 1;
+                    return acc;
+                }, {});
+
+                const labels = Object.keys(factionCounts);
+                const counts = Object.values(factionCounts);
+                
+                const chartData = {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Nº de Bandas',
+                        data: counts,
+                        backgroundColor: [
+                            'rgba(100, 116, 139, 0.7)',
+                            'rgba(217, 119, 6, 0.7)',
+                            'rgba(22, 163, 74, 0.7)',
+                            'rgba(220, 38, 38, 0.7)',
+                            'rgba(124, 58, 237, 0.7)',
+                            'rgba(21, 128, 61, 0.7)',
+                            'rgba(2, 132, 199, 0.7)',
+                            'rgba(217, 70, 239, 0.7)'
+                        ],
+                        borderColor: '#ffffff',
+                        borderWidth: 2
+                    }]
+                };
+
+                if (factionChart) factionChart.destroy();
+                factionChart = new Chart(document.getElementById('faction-chart'), {
+                    type: 'doughnut',
+                    data: chartData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { 
+                                position: 'bottom',
+                                labels: {
+                                    boxWidth: 12,
+                                    padding: 15
+                                }
+                             }
+                        }
+                    }
+                });
+            }
+            
+            function renderPerformanceChart(data) {
+                const sortedData = [...data].sort((a,b) => b.wins - a.wins).slice(0, 5);
+                const labels = sortedData.map(wb => wb.name);
+                
+                const chartData = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Victorias',
+                            data: sortedData.map(wb => wb.wins),
+                            backgroundColor: 'rgba(22, 163, 74, 0.7)',
+                        },
+                        {
+                            label: 'Derrotas',
+                            data: sortedData.map(wb => wb.losses),
+                            backgroundColor: 'rgba(220, 38, 38, 0.7)',
+                        },
+                    ]
+                };
+                
+                if (performanceChart) performanceChart.destroy();
+                performanceChart = new Chart(document.getElementById('performance-chart'), {
+                    type: 'bar',
+                    data: chartData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        },
+                        scales: {
+                            x: {
+                                stacked: true,
+                                ticks: {
+                                    autoSkip: false,
+                                     callback: function(value, index, values) {
+                                        const label = this.getLabelForValue(value);
+                                        return label.length > 16 ? label.substring(0, 16) + '...' : label;
+                                    }
+                                }
+                            },
+                            y: {
+                                stacked: true,
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // --- INICIAR LA APLICACIÓN ---
+            init();
+        });
+    </script>
+</body>
+</html>
