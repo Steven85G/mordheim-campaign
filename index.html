@@ -37,7 +37,7 @@
 
     <div class="container mx-auto p-4 sm:p-6 lg:p-8">
         <header class="text-center mb-8">
-            <h1 class="text-3xl sm:text-4xl font-bold text-stone-900">Campaña de Mordheim</h1>
+            <h1 class="text-3xl sm:text-4xl font-bold text-stone-900">CAMPAÑA DE MORDHEIM</h1>
             <p class="text-base sm:text-lg text-stone-600 mt-2">Estado actual de las bandas en las desoladas calles de la Ciudad de los Condenados</p>
         </header>
 
@@ -47,9 +47,9 @@
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
                     <h2 class="text-xl sm:text-2xl font-bold text-stone-800 mb-3 sm:mb-0">Clasificación de Bandas</h2>
                     <div class="flex items-center space-x-2">
-                        <label for="faction-filter" class="text-sm font-medium text-stone-600">Filtrar por facción:</label>
+                        <label for="faction-filter" class="text-sm font-medium text-stone-600">Filtrar por tipo de Banda:</label>
                         <select id="faction-filter" class="bg-stone-50 border border-stone-300 text-stone-900 text-sm rounded-lg focus:ring-slate-500 focus:border-slate-500 block w-full sm:w-auto p-2">
-                            <option value="all">Todas las facciones</option>
+                            <option value="all">Todas las bandas</option>
                         </select>
                     </div>
                 </div>
@@ -71,16 +71,16 @@
                             </tbody>
                     </table>
                 </div>
-                <p id="no-results" class="text-center text-stone-500 mt-8 hidden">No se encontraron bandas para la facción seleccionada.</p>
+                <p id="no-results" class="text-center text-stone-500 mt-8 hidden">No se encontraron bandas para la tipo de banda seleccionada.</p>
             </div>
 
             <aside class="space-y-6 sm:space-y-8">
                 <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
                     <h3 class="text-lg sm:text-xl font-bold text-stone-800 mb-4">Estadísticas de la Campaña</h3>
-                    <p class="text-xs sm:text-sm text-stone-600 mb-4">Un resumen visual del estado de la campaña. Usa el filtro para explorar los datos por facción.</p>
+                    <p class="text-xs sm:text-sm text-stone-600 mb-4">Resumen visual del estado de la campaña. Usa el filtro para explorar por tipo de banda.</p>
                     <div class="grid grid-cols-2 gap-3 sm:gap-4 text-center">
                         <div class="bg-stone-50 p-3 rounded-lg">
-                            <p class="text-xl sm:text-2xl font-bold text-slate-700" id="total-warbands">-</p>
+                            <p class="text-xl sm:text-2xl font-bold text-blue-700" id="total-warbands">-</p>
                             <p class="text-xs font-medium text-stone-500 uppercase">Bandas</p>
                         </div>
                         <div class="bg-stone-50 p-3 rounded-lg">
@@ -89,7 +89,7 @@
                         </div>
                         <div class="bg-stone-50 p-3 rounded-lg col-span-2">
                             <p class="text-xl sm:text-2xl font-bold text-slate-700" id="avg-rating">-</p>
-                            <p class="text-xs font-medium text-stone-500 uppercase">Valor Medio</p>
+                            <p class="text-xs font-medium text-stone-500 uppercase">Valor de Banda Medio</p>
                         </div>
                     </div>
                 </div>
@@ -102,7 +102,7 @@
                 </div>
 
                 <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                    <h3 class="text-lg sm:text-xl font-bold text-stone-800 mb-2">Composición de Facciones</h3>
+                    <h3 class="text-lg sm:text-xl font-bold text-stone-800 mb-2">Composición de tipos de Banda</h3>
                     <div class="chart-container">
                         <canvas id="faction-chart"></canvas>
                     </div>
@@ -123,14 +123,14 @@
             // --- DATOS DE LA CAMPAÑA ---
             const warbandsData = [
                 { player: 'Gerard', name: 'Waaaaaagh', faction: 'Orkos Negros', rating: 61, wins: 0, losses: 0, notes: 'Waaaaaagh!' },
-                { player: 'Victor', name: 'La Tribu Rompehuesos', faction: 'Ogros', rating: 88, wins: 0, losses: 0, notes: 'Abrazamos arboles...para darte con ellos!' },
+                { player: 'Víctor', name: 'Tribu Rompehuesos', faction: 'Ogros', rating: 88, wins: 0, losses: 0, notes: 'Abrazamos arboles...para darte con ellos!' },
                 { player: 'Uri', name: '', faction: '', rating: 0, wins: 0, losses: 0, notes: 'Si la casa está en llamas, yo chill de cojones' },
-                { player: 'Carles', name: 'Los Tripichulos del Puente', faction: 'Elfos Oscuros', rating: 0, wins: 0, losses: 0, notes: 'Negro es el veneno que os vamos a dar' },
+                { player: 'Carles', name: 'Tripichulos del Puente', faction: 'Elfos Oscuros', rating: 0, wins: 0, losses: 0, notes: 'Negro es el veneno que os vamos a dar' },
                 { player: 'Albert', name: '', faction: 'No Muertos', rating: 0, wins: 0, losses: 0, notes: 'Os invitamos a cenar, traed la sangre y los cerebros' },
                 { player: 'Taquru', name: '', faction: '', rating: 0, wins: 0, losses: 0, notes: 'Malditos seguidores del caos, solo perdonamos a las culonas' },
-                { player: 'Nestor', name: '', faction: 'Barbaros del Caos', rating: 0, wins: 0, losses: 0, notes: 'De frente y al lio, no nos calenteis la cabeza' },
-		{ player: 'Arian', name: 'Los hijastros de Beliazoth', faction: 'Cazadores de Brujas', rating: 77, wins: 0, losses: 0, notes: 'Hemos venido a odiaros con amor' },
-		{ player: 'Ivan', name: '', faction: '', rating: 0, wins: 0, losses: 0, notes: '' },
+                { player: 'Nestor', name: '', faction: 'Bárbaros del Caos', rating: 0, wins: 0, losses: 0, notes: 'De frente y al lio, no nos calenteis la cabeza' },
+		{ player: 'Arian', name: 'Hijastros de Beliazoth', faction: 'Cazadores de Brujas', rating: 77, wins: 0, losses: 0, notes: 'Hemos venido a odiaros con amor' },
+		{ player: 'Iván', name: '', faction: '', rating: 0, wins: 0, losses: 0, notes: '' },
             ];
 
             // --- ESTADO DE LA APLICACIÓN ---
