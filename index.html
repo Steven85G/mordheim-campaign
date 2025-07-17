@@ -85,7 +85,7 @@
                         </div>
                         <div class="bg-stone-50 p-3 rounded-lg">
                             <p class="text-xl sm:text-2xl font-bold text-blue-700" id="total-games">-</p>
-                            <p class="text-xs font-medium text-stone-600 uppercase">Incursiones</p>
+                            <p class="text-xs font-medium text-stone-600 uppercase">Partidas</p>
                         </div>
                         <div class="bg-stone-50 p-3 rounded-lg col-span-2">
                             <p class="text-xl sm:text-2xl font-bold text-blue-700" id="avg-rating">-</p>
@@ -129,8 +129,18 @@
                 { player: 'Albert', name: 'Desamparados', faction: 'No Muertos', rating: 98, wins: 0, losses: 1, notes: 'Os invitamos a cenar, traed la sangre y los cerebros' },
                 { player: 'Taquru', name: 'Adoradores de lluvia Ácida', faction: 'Altos Elfos Sombrios', rating: 86, wins: 0, losses: 0, notes: 'Malditos seguidores del caos, solo perdonamos a las culonas' },
                 { player: 'Nestor', name: 'Tuneadores de Caras', faction: 'Bárbaros del Caos', rating: 1, wins: 0, losses: 0, notes: 'De frente y al lio, no nos calenteis la cabeza' },
-		{ player: 'Arian', name: 'Hijastros de Beliazoth', faction: 'Cazadores de Brujas', rating: 77, wins: 0, losses: 0, notes: 'Hemos venido a odiaros con amor' },
-		{ player: 'Ivan', name: 'Garden Circus', faction: 'Feria Ambulante del Caos', rating: 93, wins: 1, losses: 0, notes: '' },
+                { player: 'Arian', name: 'Hijastros de Beliazoth', faction: 'Cazadores de Brujas', rating: 77, wins: 0, losses: 0, notes: 'Hemos venido a odiaros con amor' },
+                { player: 'Ivan', name: 'Garden Circus', faction: 'Feria Ambulante del Caos', rating: 93, wins: 1, losses: 0, notes: '' },
+            ];
+
+            // --- NUEVO: REGISTRO DE PARTIDAS ---
+            // Cada objeto representa una partida única.
+            // Añade un nuevo objeto aquí por cada partida jugada.
+            const gamesData = [
+                { id: 1, players: ['Gerard', 'Ivan', 'Carles', 'Albert'] },
+                // Ejemplo de cómo añadir más partidas:
+                // { id: 2, players: ['Víctor', 'Uri'] },
+		    
             ];
 
             // --- ESTADO DE LA APLICACIÓN ---
@@ -213,12 +223,15 @@
             function updateDashboardStats(data) {
                 const activeWarbands = data.filter(wb => wb.name && wb.faction && wb.rating > 0);
                 const totalWarbands = activeWarbands.length;
-                const totalGames = activeWarbands.reduce((acc, wb) => acc + wb.wins + wb.losses, 0);
+                
+                // --- MODIFICADO: Calcular total de partidas desde gamesData ---
+                const totalGames = gamesData.length; 
+                
                 const totalRating = activeWarbands.reduce((acc, wb) => acc + wb.rating, 0);
                 const avgRating = totalWarbands > 0 ? Math.round(totalRating / totalWarbands) : 0;
                 
                 document.getElementById('total-warbands').textContent = totalWarbands;
-                document.getElementById('total-games').textContent = totalGames;
+                document.getElementById('total-games').textContent = totalGames; // Actualiza el elemento correcto
                 document.getElementById('avg-rating').textContent = avgRating;
             }
 
@@ -298,15 +311,15 @@
                         data: counts,
                         backgroundColor: [
                             'rgba(50, 50, 50, 0.7)', // Gris oscuro
-                            'rgba(255, 165, 0, 0.7)',   // Naranja
-                            'rgba(147, 197, 114, 0.7)',   // Verde
-                            'rgba(220, 38, 38, 0.7)',   // Rojo
-                            'rgba(128, 0, 128, 0.7)',  // Violeta
-                            'rgba(255, 0, 0, 0.7)',   // Rojo
-                            'rgba(64, 224, 208, 0.7)',   // Turquesa
-                            'rgba(255, 215, 0, 0.7)',  // Amarillo
-                            'rgba(200, 162, 200, 0.7)',  // Lila
-                            'rgba(6, 182, 212, 0.7)'    // Cian (nuevo)
+                            'rgba(255, 165, 0, 0.7)',     // Naranja
+                            'rgba(147, 197, 114, 0.7)',     // Verde
+                            'rgba(220, 38, 38, 0.7)',     // Rojo
+                            'rgba(128, 0, 128, 0.7)',   // Violeta
+                            'rgba(255, 0, 0, 0.7)',     // Rojo
+                            'rgba(64, 224, 208, 0.7)',     // Turquesa
+                            'rgba(255, 215, 0, 0.7)',   // Amarillo
+                            'rgba(200, 162, 200, 0.7)',   // Lila
+                            'rgba(6, 182, 212, 0.7)'     // Cian (nuevo)
                         ],
                         borderColor: '#ffffff',
                         borderWidth: 2
