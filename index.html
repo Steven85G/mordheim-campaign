@@ -133,14 +133,10 @@
                 { player: 'Ivan', name: 'Garden Circus', faction: 'Feria Ambulante del Caos', rating: 93, wins: 1, losses: 0, notes: '' },
             ];
 
-            // --- NUEVO: REGISTRO DE PARTIDAS ---
-            // Cada objeto representa una partida única.
-            // Añade un nuevo objeto aquí por cada partida jugada.
             const gamesData = [
                 { id: 1, players: ['Gerard', 'Ivan', 'Carles', 'Albert'] },
-                // Ejemplo de cómo añadir más partidas:
-                // { id: 2, players: ['Víctor', 'Uri'] },
-		    
+                // Ejemplo: Si Uri y Víctor juegan, se añade otra partida
+                // { id: 2, players: ['Uri', 'Víctor'] }, 
             ];
 
             // --- ESTADO DE LA APLICACIÓN ---
@@ -149,14 +145,12 @@
             const tableBody = document.getElementById('warbands-table-body');
             const noResultsMessage = document.getElementById('no-results');
 
-            // --- INICIALIZACIÓN ---
             function init() {
                 populateFactionFilter();
                 factionFilter.addEventListener('change', render);
                 render();
             }
 
-            // --- FUNCIONES DE RENDERIZADO ---
             function render() {
                 const filteredData = getFilteredData();
                 renderTable(filteredData);
@@ -173,7 +167,7 @@
             }
 
             function populateFactionFilter() {
-                const factions = [...new Set(warbandsData.map(wb => wb.faction).filter(f => f))]; // Filtrar facciones vacías
+                const factions = [...new Set(warbandsData.map(wb => wb.faction).filter(f => f))];
                 factions.sort().forEach(faction => {
                     const option = document.createElement('option');
                     option.value = faction;
@@ -191,7 +185,7 @@
                 }
                 noResultsMessage.classList.add('hidden');
 
-                const sortedData = [...data].sort((a, b) => { // Crear una copia para ordenar, no el original
+                const sortedData = [...data].sort((a, b) => {
                     const totalGamesA = a.wins + a.losses;
                     const totalGamesB = b.wins + b.losses;
                     
@@ -220,25 +214,41 @@
                 });
             }
             
+            // --- FUNCIÓN MODIFICADA ---
             function updateDashboardStats(data) {
                 const activeWarbands = data.filter(wb => wb.name && wb.faction && wb.rating > 0);
                 const totalWarbands = activeWarbands.length;
-                
-                // --- MODIFICADO: Calcular total de partidas desde gamesData ---
-                const totalGames = gamesData.length; 
-                
                 const totalRating = activeWarbands.reduce((acc, wb) => acc + wb.rating, 0);
                 const avgRating = totalWarbands > 0 ? Math.round(totalRating / totalWarbands) : 0;
                 
+                let totalGames;
+                const selectedFaction = factionFilter.value;
+
+                if (selectedFaction === 'all') {
+                    // Si no hay filtro, cuenta todas las partidas.
+                    totalGames = gamesData.length;
+                } else {
+                    // Si hay una facción seleccionada...
+                    // 1. Obtenemos los nombres de los jugadores de esa facción.
+                    const filteredPlayers = data.map(wb => wb.player);
+                    
+                    // 2. Filtramos `gamesData` para encontrar las partidas donde participó alguno de esos jugadores.
+                    const factionGames = gamesData.filter(game => 
+                        game.players.some(playerInGame => filteredPlayers.includes(playerInGame))
+                    );
+                    
+                    // 3. El total es la cantidad de partidas encontradas.
+                    totalGames = factionGames.length;
+                }
+                
                 document.getElementById('total-warbands').textContent = totalWarbands;
-                document.getElementById('total-games').textContent = totalGames; // Actualiza el elemento correcto
+                document.getElementById('total-games').textContent = totalGames;
                 document.getElementById('avg-rating').textContent = avgRating;
             }
 
-            // --- FUNCIONES DE GRÁFICOS ---
             function renderCharts(data) {
                 renderRatingChart(data.filter(wb => wb.name && wb.rating > 0));
-                renderFactionChart(warbandsData.filter(wb => wb.faction)); // Faction chart always uses all data with a faction
+                renderFactionChart(warbandsData.filter(wb => wb.faction));
                 renderPerformanceChart(data.filter(wb => wb.name && (wb.wins > 0 || wb.losses > 0)));
             }
 
@@ -266,29 +276,8 @@
                         indexAxis: 'y',
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        return `Valor: ${context.raw}`;
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            x: { beginAtZero: true },
-                            y: {
-                                ticks: {
-                                    autoSkip: false,
-                                    callback: function(value, index, values) {
-                                        // Truncar etiquetas largas para móviles
-                                        const label = this.getLabelForValue(value);
-                                        return label.length > 20 ? label.substring(0, 18) + '...' : label;
-                                    }
-                                }
-                            }
-                        }
+                        plugins: { legend: { display: false } },
+                        scales: { x: { beginAtZero: true } }
                     }
                 });
             }
@@ -310,16 +299,10 @@
                         label: 'Nº de Bandas',
                         data: counts,
                         backgroundColor: [
-                            'rgba(50, 50, 50, 0.7)', // Gris oscuro
-                            'rgba(255, 165, 0, 0.7)',     // Naranja
-                            'rgba(147, 197, 114, 0.7)',     // Verde
-                            'rgba(220, 38, 38, 0.7)',     // Rojo
-                            'rgba(128, 0, 128, 0.7)',   // Violeta
-                            'rgba(255, 0, 0, 0.7)',     // Rojo
-                            'rgba(64, 224, 208, 0.7)',     // Turquesa
-                            'rgba(255, 215, 0, 0.7)',   // Amarillo
-                            'rgba(200, 162, 200, 0.7)',   // Lila
-                            'rgba(6, 182, 212, 0.7)'     // Cian (nuevo)
+                            'rgba(50, 50, 50, 0.7)', 'rgba(255, 165, 0, 0.7)', 'rgba(147, 197, 114, 0.7)', 
+                            'rgba(220, 38, 38, 0.7)', 'rgba(128, 0, 128, 0.7)', 'rgba(255, 0, 0, 0.7)', 
+                            'rgba(64, 224, 208, 0.7)', 'rgba(255, 215, 0, 0.7)', 'rgba(200, 162, 200, 0.7)',
+                            'rgba(6, 182, 212, 0.7)'
                         ],
                         borderColor: '#ffffff',
                         borderWidth: 2
@@ -333,15 +316,7 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: {
-                            legend: { 
-                                position: 'bottom', // Leyenda abajo para dejar más espacio al gráfico
-                                labels: {
-                                    boxWidth: 12,
-                                    padding: 15
-                                }
-                            }
-                        }
+                        plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 15 } } }
                     }
                 });
             }
@@ -353,16 +328,8 @@
                 const chartData = {
                     labels: labels,
                     datasets: [
-                        {
-                            label: 'Victorias',
-                            data: sortedData.map(wb => wb.wins),
-                            backgroundColor: 'rgba(22, 163, 74, 0.7)',
-                        },
-                        {
-                            label: 'Derrotas',
-                            data: sortedData.map(wb => wb.losses),
-                            backgroundColor: 'rgba(220, 38, 38, 0.7)',
-                        },
+                        { label: 'Victorias', data: sortedData.map(wb => wb.wins), backgroundColor: 'rgba(22, 163, 74, 0.7)' },
+                        { label: 'Derrotas', data: sortedData.map(wb => wb.losses), backgroundColor: 'rgba(220, 38, 38, 0.7)' },
                     ]
                 };
                 
@@ -373,36 +340,12 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom' // Leyenda abajo
-                            }
-                        },
-                        scales: {
-                            x: {
-                                stacked: true,
-                                ticks: {
-                                    autoSkip: false,
-                                    callback: function(value, index, values) {
-                                        // Truncar etiquetas largas para móviles
-                                        const label = this.getLabelForValue(value);
-                                        return label.length > 16 ? label.substring(0, 14) + '...' : label;
-                                    }
-                                }
-                            },
-                            y: {
-                                stacked: true,
-                                beginAtZero: true,
-                                ticks: {
-                                    stepSize: 1
-                                }
-                            }
-                        }
+                        plugins: { legend: { position: 'bottom' } },
+                        scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } } }
                     }
                 });
             }
 
-            // --- INICIAR LA APLICACIÓN ---
             init();
         });
     </script>
