@@ -12,11 +12,11 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-image: url('./fondo-mordheim1.jpg'); /* <-- CAMBIA ESTO por el nombre de tu imagen */
-            background-size: cover; /* Para que la imagen cubra toda la pantalla */
-            background-position: center; /* Para centrar la imagen */
-            background-repeat: no-repeat; /* Para que no se repita */
-            background-attachment: fixed; /* Para que el fondo se quede fijo al hacer scroll */
+            background-image: url('./fondo-mordheim1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
         /* Contenedor responsivo para los gráficos */
         .chart-container {
@@ -100,6 +100,13 @@
                 </div>
 
                 <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
+                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Distritos más Disputados</h3>
+                    <div class="chart-container">
+                        <canvas id="district-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
                     <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Ranking por Valor de Banda</h3>
                     <div class="chart-container">
                         <canvas id="rating-chart"></canvas>
@@ -127,26 +134,27 @@
         document.addEventListener('DOMContentLoaded', function () {
             // --- DATOS DE LA CAMPAÑA ---
             const warbandsData = [
-                { player: 'Gerard', name: 'Waaaaaagh', faction: 'Orkos Negros', rating: 83, wins: 0, losses: 1, notes: 'Waaaaaagh!' },
+                { player: 'Gerard', name: 'Waaaaaagh', faction: 'Orkos Negros', rating: 99, wins: 0, losses: 2, notes: 'Waaaaaagh!' },
                 { player: 'Víctor', name: 'Tribu Rompehuesos', faction: 'Ogros', rating: 88, wins: 0, losses: 0, notes: 'Abrazamos arboles...para darte con ellos!' },
                 { player: 'Uri', name: 'Hijos de la Jarra Rota', faction: 'Cazadores Astados', rating: 111, wins: 0, losses: 0, notes: 'Si la casa está en llamas, yo chill de cojones' },
-                { player: 'Carles', name: 'Tripielfos', faction: 'Elfos Oscuros', rating: 115, wins: 0, losses: 1, notes: 'Negro es el veneno que os vamos a dar' },
-                { player: 'Albert', name: 'Desamparados', faction: 'No Muertos', rating: 98, wins: 0, losses: 1, notes: 'Os invitamos a cenar, traed la sangre y los cerebros' },
+                { player: 'Carles', name: 'Tripielfos', faction: 'Elfos Oscuros', rating: 130, wins: 0, losses: 2, notes: 'Negro es el veneno que os vamos a dar' },
+                { player: 'Albert', name: 'Desamparados', faction: 'No Muertos', rating: 113, wins: 1, losses: 1, notes: 'Os invitamos a cenar, traed la sangre y los cerebros' },
                 { player: 'Taquru', name: 'Adoradores de lluvia Ácida', faction: 'Altos Elfos Sombrios', rating: 86, wins: 0, losses: 0, notes: 'Malditos seguidores del caos, solo perdonamos a las culonas' },
                 { player: 'Nestor', name: 'Tuneadores de Caras', faction: 'Bárbaros del Caos', rating: 1, wins: 0, losses: 0, notes: 'De frente y al lio, no nos calenteis la cabeza' },
                 { player: 'Arian', name: 'Hijastros de Beliazoth', faction: 'Cazadores de Brujas', rating: 77, wins: 0, losses: 0, notes: 'Hemos venido a odiaros con amor' },
-                { player: 'Ivan', name: 'Garden Circus', faction: 'Feria Ambulante del Caos', rating: 93, wins: 1, losses: 0, notes: '' },
+                { player: 'Ivan', name: 'Garden Circus', faction: 'Feria Ambulante del Caos', rating: 107, wins: 1, losses: 1, notes: '' },
                 { player: 'Alkoz', name: 'Hijos de Hashut', faction: 'Enanos del Caos', rating: 95, wins: 0, losses: 0, notes: '' },
             ];
 
+            // MODIFICADO: Añadido campo 'distrito'
             const gamesData = [
-                { id: 1, players: ['Gerard', 'Ivan', 'Carles', 'Albert'] },
-                // Ejemplo: Si Uri y Víctor juegan, se añade otra partida
-                // { id: 2, players: ['Uri', 'Víctor'] }, 
+                { id: 1, players: ['Gerard', 'Ivan', 'Carles', 'Albert'], district: 'El Cementerio' },
+                { id: 2, players: ['Gerard', 'Ivan', 'Carles', 'Albert'], district: 'Estatua del Conde Gotthard' },
+                // { id: , players: ['Nestor', 'Taquru'], district: '' },
             ];
 
             // --- ESTADO DE LA APLICACIÓN ---
-            let ratingChart, factionChart, performanceChart;
+            let ratingChart, factionChart, performanceChart, districtChart; // Añadido districtChart
             const factionFilter = document.getElementById('faction-filter');
             const tableBody = document.getElementById('warbands-table-body');
             const noResultsMessage = document.getElementById('no-results');
@@ -220,7 +228,6 @@
                 });
             }
             
-            // --- FUNCIÓN MODIFICADA ---
             function updateDashboardStats(data) {
                 const activeWarbands = data.filter(wb => wb.name && wb.faction && wb.rating > 0);
                 const totalWarbands = activeWarbands.length;
@@ -231,19 +238,12 @@
                 const selectedFaction = factionFilter.value;
 
                 if (selectedFaction === 'all') {
-                    // Si no hay filtro, cuenta todas las partidas.
                     totalGames = gamesData.length;
                 } else {
-                    // Si hay una facción seleccionada...
-                    // 1. Obtenemos los nombres de los jugadores de esa facción.
                     const filteredPlayers = data.map(wb => wb.player);
-                    
-                    // 2. Filtramos `gamesData` para encontrar las partidas donde participó alguno de esos jugadores.
                     const factionGames = gamesData.filter(game => 
                         game.players.some(playerInGame => filteredPlayers.includes(playerInGame))
                     );
-                    
-                    // 3. El total es la cantidad de partidas encontradas.
                     totalGames = factionGames.length;
                 }
                 
@@ -252,10 +252,58 @@
                 document.getElementById('avg-rating').textContent = avgRating;
             }
 
+            // --- FUNCIONES DE GRÁFICOS ---
             function renderCharts(data) {
+                renderDistrictChart(); // NUEVO
                 renderRatingChart(data.filter(wb => wb.name && wb.rating > 0));
                 renderFactionChart(warbandsData.filter(wb => wb.faction));
                 renderPerformanceChart(data.filter(wb => wb.name && (wb.wins > 0 || wb.losses > 0)));
+            }
+
+            // --- NUEVA FUNCIÓN: Gráfica de Distritos ---
+            function renderDistrictChart() {
+                const districtCounts = gamesData.reduce((acc, game) => {
+                    if (game.district) {
+                        acc[game.district] = (acc[game.district] || 0) + 1;
+                    }
+                    return acc;
+                }, {});
+
+                const sortedDistricts = Object.entries(districtCounts).sort(([,a],[,b]) => b-a);
+                
+                const labels = sortedDistricts.map(([district]) => district);
+                const counts = sortedDistricts.map(([,count]) => count);
+
+                const chartData = {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Nº de Partidas',
+                        data: counts,
+                        backgroundColor: 'rgba(107, 114, 128, 0.7)', // Gris
+                        borderColor: 'rgba(55, 65, 81, 1)',
+                        borderWidth: 1
+                    }]
+                };
+
+                if (districtChart) districtChart.destroy();
+                districtChart = new Chart(document.getElementById('district-chart'), {
+                    type: 'bar',
+                    data: chartData,
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                        },
+                        scales: { 
+                            x: { 
+                                beginAtZero: true,
+                                ticks: { stepSize: 1 }
+                            } 
+                        }
+                    }
+                });
             }
 
             function renderRatingChart(data) {
