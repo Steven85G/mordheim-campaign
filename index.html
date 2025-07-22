@@ -18,22 +18,21 @@
             background-repeat: no-repeat;
             background-attachment: fixed;
         }
-        /* Contenedor responsivo para los gráficos */
         .chart-container {
             position: relative;
             width: 100%;
-            height: 280px; /* Altura base para móviles */
-            max-height: 300px; /* Altura máxima para evitar que sean demasiado grandes en escritorio */
+            height: 280px;
+            max-height: 300px;
         }
-        @media (min-width: 640px) { /* sm breakpoint */
+        @media (min-width: 640px) {
             .chart-container {
                 height: 320px;
                 max-height: 350px;
             }
         }
-        @media (min-width: 1024px) { /* lg breakpoint - Ajuste para la columna lateral */
+        @media (min-width: 1024px) {
             .lg\:col-span-2 ~ aside .chart-container {
-                height: 280px; /* Ligeramente más pequeños en el sidebar grande */
+                height: 280px;
             }
         }
     </style>
@@ -69,14 +68,14 @@
                                 <th scope="col" class="px-4 py-3 text-center">Valor</th>
                                 <th scope="col" class="px-4 py-3 text-center" title="Victorias">V</th>
                                 <th scope="col" class="px-4 py-3 text-center" title="Derrotas">D</th>
-                                <th scope="col" class="px-4 py-3 text-center rounded-r-lg" title="Partidas Totales">PT</th>
+                                <th scope="col" class="px-4 py-3 text-center rounded-r-lg" title="Puntos">P</th>
                             </tr>
                         </thead>
                         <tbody id="warbands-table-body">
                             </tbody>
                     </table>
                 </div>
-                <p id="no-results" class="text-center text-stone-600 mt-8 hidden">No se encontraron bandas para la tipo de banda seleccionada.</p>
+                <p id="no-results" class="text-center text-stone-600 mt-8 hidden">No se encontraron bandas para el tipo de banda seleccionada.</p>
             </div>
 
             <aside class="space-y-6 sm:space-y-8">
@@ -86,11 +85,11 @@
                     <div class="grid grid-cols-2 gap-3 sm:gap-4 text-center">
                         <div class="bg-stone-50 p-3 rounded-lg">
                             <p class="text-xl sm:text-2xl font-bold text-blue-700" id="total-warbands">-</p>
-                            <p class="text-xs font-medium text-stone-600 uppercase">Bandas</p>
+                            <p class="text-xs font-medium text-stone-600 uppercase">Nº de Bandas</p>
                         </div>
                         <div class="bg-stone-50 p-3 rounded-lg">
                             <p class="text-xl sm:text-2xl font-bold text-blue-700" id="total-games">-</p>
-                            <p class="text-xs font-medium text-stone-600 uppercase">Partidas</p>
+                            <p class="text-xs font-medium text-stone-600 uppercase">Partidas Totales</p>
                         </div>
                         <div class="bg-stone-50 p-3 rounded-lg col-span-2">
                             <p class="text-xl sm:text-2xl font-bold text-blue-700" id="avg-rating">-</p>
@@ -98,11 +97,11 @@
                         </div>
                     </div>
                 </div>
-
+                
                 <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Distritos más Disputados</h3>
+                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Actividad de los Jugadores</h3>
                     <div class="chart-container">
-                        <canvas id="district-chart"></canvas>
+                        <canvas id="player-games-chart"></canvas>
                     </div>
                 </div>
 
@@ -112,18 +111,18 @@
                         <canvas id="rating-chart"></canvas>
                     </div>
                 </div>
-
-                <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Composición de tipos de Banda</h3>
-                    <div class="chart-container">
-                        <canvas id="faction-chart"></canvas>
-                    </div>
-                </div>
                 
                 <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
                     <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Top 5 Rendimiento en Batalla</h3>
                     <div class="chart-container">
                         <canvas id="performance-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
+                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Distritos más Disputados</h3>
+                    <div class="chart-container">
+                        <canvas id="district-chart"></canvas>
                     </div>
                 </div>
             </aside>
@@ -145,7 +144,7 @@
                 { player: 'Ivan', name: 'Garden Circus', faction: 'Feria Ambulante del Caos', rating: 107, wins: 1, losses: 1, notes: '' },
                 { player: 'Alkoz', name: 'Hijos de Hashut', faction: 'Enanos del Caos', rating: 95, wins: 0, losses: 0, notes: '' },
             ];
-
+            
             // MODIFICADO: Añadido campo 'distrito'
             const gamesData = [
                 { id: 1, players: ['Gerard', 'Ivan', 'Carles', 'Albert'], district: 'El Cementerio' },
@@ -154,7 +153,7 @@
             ];
 
             // --- ESTADO DE LA APLICACIÓN ---
-            let ratingChart, factionChart, performanceChart, districtChart; // Añadido districtChart
+            let ratingChart, playerGamesChart, performanceChart, districtChart;
             const factionFilter = document.getElementById('faction-filter');
             const tableBody = document.getElementById('warbands-table-body');
             const noResultsMessage = document.getElementById('no-results');
@@ -200,16 +199,17 @@
                 noResultsMessage.classList.add('hidden');
 
                 const sortedData = [...data].sort((a, b) => {
-                    const totalGamesA = a.wins + a.losses;
-                    const totalGamesB = b.wins + b.losses;
+                    const pointsA = (a.wins * 3) + a.losses;
+                    const pointsB = (b.wins * 3) + b.losses;
                     
-                    if (b.wins !== a.wins) return b.wins - a.wins;
-                    if (totalGamesB !== totalGamesA) return totalGamesB - totalGamesA;
-                    return b.rating - a.rating;
+                    if (pointsB !== pointsA) {
+                        return pointsB - pointsA;
+                    }
+                    return b.wins - a.wins;
                 });
 
                 sortedData.forEach((wb, index) => {
-                    const totalGames = wb.wins + wb.losses;
+                    const points = (wb.wins * 3) + wb.losses;
                     const row = document.createElement('tr');
                     row.className = 'bg-white border-b hover:bg-stone-50';
                     row.innerHTML = `
@@ -222,7 +222,7 @@
                         <td class="px-4 py-4 text-center">${wb.rating}</td>
                         <td class="px-4 py-4 text-center font-bold text-green-600">${wb.wins}</td>
                         <td class="px-4 py-4 text-center font-bold text-red-600">${wb.losses}</td>
-                        <td class="px-4 py-4 text-center font-bold">${totalGames}</td>
+                        <td class="px-4 py-4 text-center font-bold text-blue-700">${points}</td>
                     `;
                     tableBody.appendChild(row);
                 });
@@ -252,15 +252,59 @@
                 document.getElementById('avg-rating').textContent = avgRating;
             }
 
-            // --- FUNCIONES DE GRÁFICOS ---
             function renderCharts(data) {
-                renderDistrictChart(); // NUEVO
+                renderPlayerGamesChart(warbandsData);
                 renderRatingChart(data.filter(wb => wb.name && wb.rating > 0));
-                renderFactionChart(warbandsData.filter(wb => wb.faction));
                 renderPerformanceChart(data.filter(wb => wb.name && (wb.wins > 0 || wb.losses > 0)));
+                renderDistrictChart();
+            }
+            
+            // MODIFICADO: Cambiado a gráfico circular (doughnut)
+            function renderPlayerGamesChart(data) {
+                const playerData = data.map(wb => ({
+                    player: wb.player,
+                    games: wb.wins + wb.losses
+                }));
+
+                const labels = playerData.map(p => p.player);
+                const counts = playerData.map(p => p.games);
+
+                const chartData = {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Partidas Jugadas',
+                        data: counts,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)','rgba(54, 162, 235, 0.7)','rgba(255, 206, 86, 0.7)',
+                            'rgba(75, 192, 192, 0.7)','rgba(153, 102, 255, 0.7)','rgba(255, 159, 64, 0.7)',
+                            'rgba(199, 199, 199, 0.7)','rgba(83, 109, 254, 0.7)','rgba(46, 204, 113, 0.7)',
+                            'rgba(241, 196, 15, 0.7)'
+                        ],
+                        borderColor: '#ffffff',
+                        borderWidth: 2
+                    }]
+                };
+
+                if (playerGamesChart) playerGamesChart.destroy();
+                playerGamesChart = new Chart(document.getElementById('player-games-chart'), {
+                    type: 'doughnut',
+                    data: chartData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    boxWidth: 12,
+                                    padding: 15
+                                }
+                            }
+                        }
+                    }
+                });
             }
 
-            // --- NUEVA FUNCIÓN: Gráfica de Distritos ---
             function renderDistrictChart() {
                 const districtCounts = gamesData.reduce((acc, game) => {
                     if (game.district) {
@@ -268,9 +312,7 @@
                     }
                     return acc;
                 }, {});
-
                 const sortedDistricts = Object.entries(districtCounts).sort(([,a],[,b]) => b-a);
-                
                 const labels = sortedDistricts.map(([district]) => district);
                 const counts = sortedDistricts.map(([,count]) => count);
 
@@ -293,15 +335,8 @@
                         indexAxis: 'y',
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                        },
-                        scales: { 
-                            x: { 
-                                beginAtZero: true,
-                                ticks: { stepSize: 1 }
-                            } 
-                        }
+                        plugins: { legend: { display: false } },
+                        scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } }
                     }
                 });
             }
@@ -310,7 +345,6 @@
                 const sortedData = [...data].sort((a, b) => b.rating - a.rating);
                 const labels = sortedData.map(wb => wb.name);
                 const ratings = sortedData.map(wb => wb.rating);
-
                 const chartData = {
                     labels: labels,
                     datasets: [{
@@ -321,7 +355,6 @@
                         borderWidth: 1
                     }]
                 };
-
                 if (ratingChart) ratingChart.destroy();
                 ratingChart = new Chart(document.getElementById('rating-chart'), {
                     type: 'bar',
@@ -335,50 +368,10 @@
                     }
                 });
             }
-
-            function renderFactionChart(data) {
-                const factionCounts = data.reduce((acc, wb) => {
-                    if (wb.faction) {
-                        acc[wb.faction] = (acc[wb.faction] || 0) + 1;
-                    }
-                    return acc;
-                }, {});
-
-                const labels = Object.keys(factionCounts);
-                const counts = Object.values(factionCounts);
-                
-                const chartData = {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Nº de Bandas',
-                        data: counts,
-                        backgroundColor: [
-                            'rgba(50, 50, 50, 0.7)', 'rgba(255, 165, 0, 0.7)', 'rgba(147, 197, 114, 0.7)', 
-                            'rgba(220, 38, 38, 0.7)', 'rgba(128, 0, 128, 0.7)', 'rgba(255, 0, 0, 0.7)', 
-                            'rgba(64, 224, 208, 0.7)', 'rgba(255, 215, 0, 0.7)', 'rgba(200, 162, 200, 0.7)',
-                            'rgba(6, 182, 212, 0.7)'
-                        ],
-                        borderColor: '#ffffff',
-                        borderWidth: 2
-                    }]
-                };
-
-                if (factionChart) factionChart.destroy();
-                factionChart = new Chart(document.getElementById('faction-chart'), {
-                    type: 'doughnut',
-                    data: chartData,
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 15 } } }
-                    }
-                });
-            }
             
             function renderPerformanceChart(data) {
                 const sortedData = [...data].sort((a,b) => (b.wins - b.losses) - (a.wins - a.losses)).slice(0, 5);
                 const labels = sortedData.map(wb => wb.name || wb.player);
-                
                 const chartData = {
                     labels: labels,
                     datasets: [
