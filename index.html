@@ -133,17 +133,19 @@
         document.addEventListener('DOMContentLoaded', function () {
             // --- DATOS DE LA CAMPAÑA ---
             const warbandsData = [
-                { player: 'Gerard', name: 'Waaaaaagh', faction: 'Orkos Negros', rating: 236, wins: 2, losses: 9, notes: 'Waaaaaagh!' },
+                { player: 'Gerard', name: 'Waaaaaagh', faction: 'Orkos Negros', rating: 253, wins: 2, losses: 11, notes: 'Waaaaaagh!' },
                 { player: 'Víctor', name: 'Tribu Rompehuesos', faction: 'Ogros', rating: 180, wins: 2, losses: 4, notes: 'Abrazamos arboles...para darte con ellos!' },
                 { player: 'Uri', name: 'Hijos de la Jarra Rota', faction: 'Cazadores Astados', rating: 111, wins: 0, losses: 0, notes: 'Si la casa está en llamas, yo chill de cojones' },
                 { player: 'Carles', name: 'Tripielfos', faction: 'Elfos Oscuros', rating: 157, wins: 0, losses: 5, notes: 'Negro es el veneno que os vamos a dar' },
-                { player: 'Albert', name: 'Desamparados', faction: 'No Muertos', rating: 239, wins: 2, losses: 5, notes: 'Os invitamos a cenar, traed el cerebro' },
+                { player: 'Albert', name: 'Desamparados', faction: 'No Muertos', rating: 253, wins: 3, losses: 5, notes: 'Os invitamos a cenar, traed el cerebro' },
                 { player: 'Taquru', name: 'NO Elfs Foscos', faction: 'Altos Elfos Sombrios', rating: 111, wins: 0, losses: 2, notes: 'Malditos seguidores del caos, solo perdonamos a las culonas' },
                 { player: 'Nestor', name: 'Face Breakers', faction: 'Bárbaros del Caos', rating: 70, wins: 0, losses: 0, notes: 'De frente y al lio, no nos calenteis la cabeza' },
                 { player: 'Arian', name: 'Hijastros de Beliazoth', faction: 'Cazadores de Brujas', rating: 77, wins: 0, losses: 0, notes: 'Hemos venido a odiaros con amor' },
                 { player: 'Ivan', name: 'Garden Circus', faction: 'Feria Ambulante del Caos', rating: 175, wins: 4, losses: 2, notes: '' },
                 { player: 'Alkoz', name: 'Hijos de Hashut', faction: 'Enanos del Caos', rating: 95, wins: 0, losses: 0, notes: '' },
                 { player: 'David', name: 'Burguers', faction: 'Mercenarios de Marienburgo', rating: 93, wins: 0, losses: 1, notes: '' },
+                { player: 'Albert2', name: 'Crazy Catai Warriors', faction: 'Monges Gerreros de Catai', rating: 132, wins: 0, losses: 1, notes: '' },
+                { player: 'Carles2', name: 'Gladiators Rage', faction: 'Luchadores del Pozo', rating: 100, wins: 1, losses: 0, notes: '' },
             ];
             
             // MODIFICADO: Añadido campo 'distrito'
@@ -159,6 +161,8 @@
                 { id: 9, players: ['Gerard', 'Albert', 'Victor'], district: 'La Roca' },
                 { id: 10, players: ['Gerard', 'Albert', 'Carles'], district: 'Estatua del Conde Gotthard' },
                 { id: 11, players: ['Gerard', 'Albert', 'Victor'], district: 'La Cárcel' },
+                { id: 11, players: ['Gerard', 'Albert', 'Carles'], district: 'La Cárcel' },
+                { id: 11, players: ['Gerard', 'Albert2', 'Carles2'], district: 'Cuartel del Cuervo' },
             ];
 
             // --- ESTADO DE LA APLICACIÓN ---
@@ -407,6 +411,7 @@
     </script>
 </body>
 </html>
+
 
 
 
