@@ -140,19 +140,20 @@
         document.addEventListener('DOMContentLoaded', function () {
             // --- DATOS DE LA CAMPAÑA ---
             const warbandsData = [
-                { player: 'Gerard', name: 'Waaaaaagh', faction: 'Orkos Negros', rating: 285, wins: 3, losses: 12, notes: 'Que haz dicho? Waaaaaagh!' },
-                { player: 'Víctor', name: 'Tribu Rompehuesos', faction: 'Ogros', rating: 180, wins: 2, losses: 5, notes: 'Abrazamos arboles... Para darte con ellos!' },
+                { player: 'Gerard', name: 'Waaaaaagh', faction: 'Orkos Negros', rating: 295, wins: 3, losses: 13, notes: 'Que haz dicho? Waaaaaagh!' },
+                { player: 'Víctor', name: 'Tribu Rompehuesos', faction: 'Ogros', rating: 190, wins: 2, losses: 6, notes: 'Abrazamos arboles... Para darte con ellos!' },
                 { player: 'Uri', name: 'Hijos de la Jarra Rota', faction: 'Cazadores Astados', rating: 111, wins: 0, losses: 0, notes: 'La casa está en llamas, it is fine' },
                 { player: 'Carles', name: 'Tripielfos', faction: 'Elfos Oscuros', rating: 131, wins: 0, losses: 6, notes: 'Confiad en nosotros, eso negro no es veneno' },
                 { player: 'Albert', name: 'Desamparados', faction: 'No Muertos', rating: 253, wins: 3, losses: 5, notes: 'Os invitamos a cenar, traed la cabeza' },
                 { player: 'Taquru', name: 'NO Elfs Foscos', faction: 'Altos Elfos Sombrios', rating: 111, wins: 0, losses: 2, notes: 'Malditos seguidores del caos, solo perdonamos a las culonas' },
                 { player: 'Nestor', name: 'Face Breakers', faction: 'Bárbaros del Caos', rating: 70, wins: 0, losses: 0, notes: 'De frente y al lio, no nos calenteis la cabeza' },
                 { player: 'Arian', name: 'Hijastros de Beliazoth', faction: 'Cazadores de Brujas', rating: 77, wins: 0, losses: 0, notes: 'Hemos venido a odiaros con amor' },
-                { player: 'Ivan', name: 'Garden Circus', faction: 'Feria Ambulante del Caos', rating: 175, wins: 5, losses: 2, notes: 'Venid a la función, hay plaga para todos' },
+                { player: 'Ivan', name: 'Garden Circus', faction: 'Feria Ambulante del Caos', rating: 199, wins: 5, losses: 2, notes: 'Venid a la función, hay plaga para todos' },
                 { player: 'Alkoz', name: 'Hijos de Hashut', faction: 'Enanos del Caos', rating: 95, wins: 0, losses: 0, notes: 'Nos va el caos a nuestro ritmo' },
                 { player: 'David', name: 'Burguers', faction: 'Mercenarios de Marienburgo', rating: 93, wins: 0, losses: 1, notes: 'Maldita suciedad, donde está mi te?' },
-                { player: 'Carles2', name: 'Gladiators Rage', faction: 'Luchadores del Pozo', rating: 146, wins: 1, losses: 1, notes: 'Somos libres... Corred...' },
-                { player: 'Albert2', name: 'Crazy Catai Warriors', faction: 'Monges Gerreros de Catai', rating: 181, wins: 0, losses: 2, notes: 'Aloz tles delicias y un poco de salsa de sangle' },
+                { player: 'Carles2', name: 'Gladiators Rage', faction: 'Luchadores del Pozo', rating: 205, wins: 3, losses: 1, notes: 'Somos libres... Ahora corred...' },
+                { player: 'Albert2', name: 'Crazy Catai Warriors', faction: 'Monges Gerreros de Catai', rating: 181, wins: 0, losses: 4, notes: 'Aloz tles delicias y un poco de salsa de sangle' },
+                { player: 'Víctor2', name: 'Hijos de Barba Blanca', faction: 'Piratas', rating: 144, wins: 0, losses: 1, notes: '¡Rayos y truenos! ¿Donde está el Ron?' },
             ];
             
             // MODIFICADO: Añadido campo 'distrito'
@@ -172,6 +173,8 @@
                 { id: 13, players: ['Gerard', 'Albert2', 'Carles2'], district: 'Cuartel del Cuervo' },
                 { id: 14, players: ['Gerard', 'Ivan'], district: 'Anfiteatro' },
                 { id: 15, players: ['Gerard', 'Albert2', 'Carles2', 'Victor'], district: 'La Gran Biblioteca' },
+                { id: 16, players: ['Gerard', 'Albert2', 'Carles2', 'Victor'], district: 'Barrio de los Ricos' },
+                { id: 17, players: ['Victor2', 'Albert2', 'Carles2'], district: 'Barrio Pobre' },
             ];
 
             // --- ESTADO DE LA APLICACIÓN ---
@@ -301,7 +304,8 @@
                             'rgba(255, 0, 0, 0.7)','rgba(54, 162, 235, 0.7)','rgba(178, 34, 34, 0.7)',
                             'rgba(75, 192, 192, 0.7)','rgba(153, 102, 255, 0.7)','rgba(255, 159, 64, 0.7)',
                             'rgba(199, 199, 199, 0.7)','rgba(83, 109, 254, 0.7)','rgba(46, 204, 113, 0.7)',
-                            'rgba(241, 196, 15, 0.7)','rgba(255, 99, 132, 0.7)','rgba(75, 192, 192, 0.7)','rgba(153, 102, 255, 0.7)'
+                            'rgba(241, 196, 15, 0.7)','rgba(255, 99, 132, 0.7)','rgba(75, 192, 192, 0.7)',
+                            'rgba(153, 102, 255, 0.7)','rgba(54, 162, 235, 0.7)'
                         ],
                         borderColor: '#ffffff',
                         borderWidth: 2
@@ -470,6 +474,7 @@
     </script>
 </body>
 </html>
+
 
 
 
