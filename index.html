@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campaña de Mordheim</title>
+    <title>Campanya de Mordheim</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,19 +41,18 @@
 
     <div class="container mx-auto p-4 sm:p-6 lg:p-8">
         <header class="text-center mb-8">
-            <h1 class="text-3xl sm:text-4xl font-bold text-white-700"></h1><br><br><br>
-            <p class="text-base sm:text-lg text-stone-200 mt-2">CAMPAÑA</p>
+            <h1 class="text-3xl sm:text-4xl font-bold text-white-700"></h1><br><br><br><br>
         </header>
 
         <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
             <div class="lg:col-span-2 bg-white rounded-lg shadow-md p-4 sm:p-6">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-                    <h2 class="text-xl sm:text-2xl font-bold text-blue-700 mb-3 sm:mb-0">Clasificación de Bandas</h2>
+                    <h2 class="text-xl sm:text-2xl font-bold text-blue-700 mb-3 sm:mb-0">Classificació de les Bandes</h2>
                     <div class="flex items-center space-x-2">
-                        <label for="faction-filter" class="text-sm font-medium text-stone-600">Filtrar por tipo de Banda:</label>
+                        <label for="faction-filter" class="text-sm font-medium text-stone-600">Filtrar per tipus de Banda:</label>
                         <select id="faction-filter" class="bg-stone-50 border border-stone-300 text-stone-900 text-sm rounded-lg focus:ring-slate-500 focus:border-slate-500 block w-full sm:w-auto p-2">
-                            <option value="all">Todas las bandas</option>
+                            <option value="all">Totes les bandes</option>
                         </select>
                     </div>
                 </div>
@@ -75,11 +74,11 @@
                             </tbody>
                     </table>
                 </div>
-                <p id="no-results" class="text-center text-stone-600 mt-8 hidden">No se encontraron bandas para el tipo de banda seleccionada.</p>
+                <p id="no-results" class="text-center text-stone-600 mt-8 hidden">No s'han trobat bandes per el tipus de banda seleccionada.</p>
                 <div class="mt-8 bg-stone-100 rounded-lg shadow-inner p-4 notes-carousel">
-                    <h3 class="text-lg font-bold text-blue-700 mb-3">Comentarios de las Bandas</h3>
+                    <h3 class="text-lg font-bold text-blue-700 mb-3">Comentaris de les Bandes</h3>
                     <div id="note-display" class="min-h-[6rem] flex flex-col justify-center text-center transition-opacity duration-1000">
-                        <p class="text-base italic text-stone-800" id="current-note">Preparando el primer comentario...</p>
+                        <p class="text-base italic text-stone-800" id="current-note">Preparant el primer comentari...</p>
                         <p class="text-sm font-semibold text-blue-600 mt-2" id="current-warband">-</p>
                     </div>
                 </div>
@@ -87,47 +86,47 @@
 
             <aside class="space-y-6 sm:space-y-8">
                 <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-4">Estadísticas de la Campaña</h3>
-                    <p class="text-xs sm:text-sm text-stone-800 mb-4">Resumen visual del estado de la campaña. Usa el filtro para explorar por tipo de banda.</p>
+                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-4">Estadístiques de la Campanya</h3>
+                    <p class="text-xs sm:text-sm text-stone-800 mb-4">Resum visual de l'estat de la campanya. Fes servir el filtre per explorar per tipus de banda.</p>
                     <div class="grid grid-cols-2 gap-3 sm:gap-4 text-center">
                         <div class="bg-stone-50 p-3 rounded-lg">
                             <p class="text-xl sm:text-2xl font-bold text-blue-700" id="total-warbands">-</p>
-                            <p class="text-xs font-medium text-stone-600 uppercase">Nº de Bandas</p>
+                            <p class="text-xs font-medium text-stone-600 uppercase">Nº de Bandes</p>
                         </div>
                         <div class="bg-stone-50 p-3 rounded-lg">
                             <p class="text-xl sm:text-2xl font-bold text-blue-700" id="total-games">-</p>
-                            <p class="text-xs font-medium text-stone-600 uppercase">Partidas Totales</p>
+                            <p class="text-xs font-medium text-stone-600 uppercase">Partides Totals</p>
                         </div>
                         <div class="bg-stone-50 p-3 rounded-lg col-span-2">
                             <p class="text-xl sm:text-2xl font-bold text-blue-700" id="avg-rating">-</p>
-                            <p class="text-xs font-medium text-stone-600 uppercase">Valor de Banda Medio</p>
+                            <p class="text-xs font-medium text-stone-600 uppercase">Valor de Banda Mitjà</p>
                         </div>
                     </div>
                 </div>
                 
                 <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Actividad de los Jugadores</h3>
+                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Activitat dels Jugadors</h3>
                     <div class="chart-container">
                         <canvas id="player-games-chart"></canvas>
                     </div>
                 </div>
 
                 <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Ranking por Valor de Banda</h3>
+                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Ranking per Valor de Banda</h3>
                     <div class="chart-container">
                         <canvas id="rating-chart"></canvas>
                     </div>
                 </div>
                 
                 <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Top 5 Rendimiento en Batalla</h3>
+                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Top 5 Rendiment en Batalla</h3>
                     <div class="chart-container">
                         <canvas id="performance-chart"></canvas>
                     </div>
                 </div>
 
                 <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Distritos más Disputados</h3>
+                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Distrctes més Disputats</h3>
                     <div class="chart-container">
                         <canvas id="district-chart"></canvas>
                     </div>
@@ -140,19 +139,30 @@
         document.addEventListener('DOMContentLoaded', function () {
             // --- DATOS DE LA CAMPAÑA ---
             const warbandsData = [
-                { player: 'Gerard', name: 'Waaaaaagh', faction: 'Orkos Negros', rating: 259, wins: 4, losses: 13, notes: 'Que haz dicho? Waaaaaagh!' },
-                { player: 'Víctor', name: 'Tribu Rompehuesos', faction: 'Ogros', rating: 190, wins: 2, losses: 6, notes: 'Abrazamos arboles... Para darte con ellos!' },
-                { player: 'Uri', name: 'Hijos de la Jarra Rota', faction: 'Cazadores Astados', rating: 111, wins: 0, losses: 0, notes: 'La casa está en llamas, it is fine' },
-                { player: 'Carles', name: 'Tripielfos', faction: 'Elfos Oscuros', rating: 131, wins: 0, losses: 6, notes: 'Confiad en nosotros, eso negro no es veneno' },
-                { player: 'Albert', name: 'Desamparados', faction: 'No Muertos', rating: 253, wins: 3, losses: 5, notes: 'Os invitamos a cenar, traed la cabeza' },
-                { player: 'Taquru', name: 'NO Elfs Foscos', faction: 'Altos Elfos Sombrios', rating: 111, wins: 0, losses: 2, notes: 'Malditos seguidores del caos, solo perdonamos a las culonas' },
-                { player: 'Nestor', name: 'Face Breakers', faction: 'Bárbaros del Caos', rating: 70, wins: 0, losses: 0, notes: 'De frente y al lio, no nos calenteis la cabeza' },
-                { player: 'Arian', name: 'Hijastros de Beliazoth', faction: 'Cazadores de Brujas', rating: 77, wins: 0, losses: 0, notes: 'Hemos venido a odiaros con amor' },
-                { player: 'Ivan', name: 'Garden Circus', faction: 'Feria Ambulante del Caos', rating: 199, wins: 5, losses: 2, notes: 'Venid a la función, hay plaga para todos' },
-                { player: 'Alkoz', name: 'Hijos de Hashut', faction: 'Enanos del Caos', rating: 95, wins: 0, losses: 0, notes: 'Nos va el caos a nuestro ritmo' },
-                { player: 'Carles2', name: 'Gladiators Rage', faction: 'Luchadores del Pozo', rating: 241, wins: 3, losses: 2, notes: 'Ya somos libres... Ahora corred...' },
-                { player: 'Albert2', name: 'Crazy Catai Warriors', faction: 'Monges Gerreros de Catai', rating: 181, wins: 0, losses: 5, notes: '¿Aloz tles delicias? y un poco de salsa de sangle' },
-                { player: 'Víctor2', name: 'Hijos de Barba Blanca', faction: 'Piratas', rating: 159, wins: 0, losses: 2, notes: '¡Rayos y truenos! ¿Donde está el Ron?' },
+                { player: 'Gerard', name: 'Sons of Minas Mórgül', faction: 'Orkos Negros', rating: 299, wins: 4, losses: 13, notes: 'Em parlez a mi? Waaaaaagh!' },
+                { player: 'Gerard2', name: 'Whololoo', faction: 'Poseidos', rating: 459, wins: 0, losses: 0, notes: 'Inofensius seguidors del senyor de les ombres' },
+                { player: 'Gerard3', name: 'Norses', faction: 'Exploradores Nórdicos', rating: 352, wins: 0, losses: 0, notes: 'Només et robarem una mica, potser et matem i ens fotem tot beure que porteu' },
+                { player: 'Gerard4', name: 'Wich Hunters', faction: 'Cazadores de Brujas', rating: 327, wins: 0, losses: 0, notes: 'Magia? A la fogueraa! St Joan is a nice day' },
+                { player: 'Gerard5', name: 'Zaraky Sons', faction: 'Bárbaros del Caos', rating: 283, wins: 0, losses: 1, notes: 'Només el camí de la sang et porta al nirvana imbécil' },
+                { player: 'Uri', name: 'Garrapatos Kaos Style', faction: 'Góblins', rating: 111, wins: 0, losses: 1, notes: 'La casa es en flames, is fine' },
+                { player: 'Uri2', name: 'Rebenta Flancs', faction: 'Hombres Bestia', rating: 150, wins: 0, losses: 0, notes: 'Mireu cap aquí que així no veureu que passa per allà' },
+                { player: 'Uri3', name: 'Els Robavides', faction: 'Muertos Sin Descanso', rating: 150, wins: 0, losses: 0, notes: 'Et robo la vida i marxo, em persegueixes et robo una altre vida i torno a marxar' },
+                { player: 'Víctor', name: 'Tribu Trencaossos', faction: 'Ogros', rating: 190, wins: 2, losses: 7, notes: 'Abracem arbres... Per matar-te amb ells!' },
+                { player: 'Víctor2', name: 'La Pitjor Generació', faction: 'Piratas', rating: 159, wins: 0, losses: 2, notes: '¡Rayos y truenos! ¿Donde está el Ron?' },
+                { player: 'Víctor3', name: 'Secta de Malekiz', faction: 'Elfos Oscuros', rating: 400, wins: 0, losses: 0, notes: 'Vine, et vui comentar algo en aquell racó darrere aquella ombra gens sospitosa' },
+                { player: 'Ivan', name: 'Garden Circus', faction: 'Feria Ambulante del Caos', rating: 199, wins: 6, losses: 2, notes: 'Som bona gent, però potser mors durant les funcions' },
+                { player: 'Ivan2', name: 'Barbes Llargues', faction: 'Enanos', rating: 350, wins: 0, losses: 0, notes: 'Hem vingut a cobrar agrabis, però multiplicats per dos' },
+                { player: 'Ivan3', name: 'Lady Von Carstein', faction: 'No Muertos', rating: 250, wins: 0, losses: 0, notes: 'Les caricies de la nostra Vampira et deixaràn garratibat' },
+                { player: 'Ivan4', name: 'Valhalla', faction: 'Exploradores Nórdicos', rating: 250, wins: 0, losses: 0, notes: 'Destrals, escuts i enemics, no necessitem més' },
+                { player: 'Ivan5', name: 'Pestilens', faction: 'Skavens', rating: 150, wins: 0, losses: 0, notes: 'Correm com rates però algún dia aguantarem més que els nans' },
+                { player: 'Carles', name: 'Tripielfs', faction: 'Elfos Oscuros', rating: 400, wins: 0, losses: 0, notes: 'Som de fiar tranquils, però passeu vosaltres al davant' },
+                { player: 'Carles2', name: 'Gladiators Rage', faction: 'Luchadores del Pozo', rating: 241, wins: 3, losses: 2, notes: 'Ara que ja som lliures... Ja podeu començar a correr!' },
+                { player: 'Carles3', name: 'Cola Filosas Eshin', faction: 'Skavens', rating: 200, wins: 0, losses: 0, notes: 'Lluitar? Aneu passant que nosaltres ara venim...' },
+                { player: 'Albert', name: 'Desamparats', faction: 'No Muertos', rating: 253, wins: 3, losses: 6, notes: 'Esteu tots convidats a sopar... No cal que porteu res...' },
+                { player: 'Albert2', name: 'Crazy Catai Warriors', faction: 'Monges Gerreros de Catai', rating: 181, wins: 0, losses: 5, notes: 'Aloz tles delicies? Atrapam si pots' },
+                { player: 'Albert3', name: 'Clan Escut de Roure', faction: 'Enanos', rating: 200, wins: 0, losses: 0, notes: 'Anem a poc a poc, però procura que no deixar-te veure' },
+                { player: 'Albert4', name: 'Liche Team', faction: 'Muertos Sin Descanso', rating: 150, wins: 0, losses: 0, notes: 'Un zombie amaga una sorpresa per tu' },
+                { player: 'Albert5', name: 'Minotauro Crush', faction: 'Hombres Bestia', rating: 100, wins: 0, losses: 0, notes: 'Aparteu-vos perque nosaltres no frenem' },
             ];
             
             // MODIFICADO: Añadido campo 'distrito'
@@ -175,6 +185,7 @@
                 { id: 16, players: ['Gerard', 'Albert2', 'Carles2', 'Victor'], district: 'Barrio de los Ricos' },
                 { id: 17, players: ['Victor2', 'Albert2', 'Carles2'], district: 'Barrio Pobre' },
                 { id: 18, players: ['Gerard', 'Albert2', 'Carles2', 'Victor2'], district: 'Barrio Pobre' },
+                { id: 19, players: ['Gerard5', 'Uri', 'Victor'], district: 'Puente Central' },
             ];
 
             // --- ESTADO DE LA APLICACIÓN ---
@@ -298,14 +309,33 @@
                 const chartData = {
                     labels: labels,
                     datasets: [{
-                        label: 'Partidas Jugadas',
+                        label: 'Partides Jugades',
                         data: counts,
                         backgroundColor: [
-                            'rgba(255, 0, 0, 0.7)','rgba(54, 162, 235, 0.7)','rgba(178, 34, 34, 0.7)',
-                            'rgba(75, 192, 192, 0.7)','rgba(153, 102, 255, 0.7)','rgba(255, 159, 64, 0.7)',
-                            'rgba(199, 199, 199, 0.7)','rgba(83, 109, 254, 0.7)','rgba(46, 204, 113, 0.7)',
-                            'rgba(241, 196, 15, 0.7)','rgba(75, 192, 192, 0.7)', 'rgba(153, 102, 255, 0.7)',
-                            'rgba(54, 162, 235, 0.7)'
+                            'rgba(255, 99, 132, 0.7)', // Gerard
+                            'rgba(255, 99, 132, 0.7)', // Gerard2
+                            'rgba(255, 99, 132, 0.7)', // Gerard3
+                            'rgba(255, 99, 132, 0.7)', // Gerard4
+                            'rgba(255, 99, 132, 0.7)', // Gerard5
+                            'rgba(54, 162, 235, 0.7)', // Uri
+                            'rgba(54, 162, 235, 0.7)', // Uri2
+                            'rgba(54, 162, 235, 0.7)', // Uri3
+                            'rgba(255, 206, 86, 0.7)', // Víctor
+                            'rgba(255, 206, 86, 0.7)', // Víctor2
+                            'rgba(255, 206, 86, 0.7)', // Víctor3
+                            'rgba(75, 192, 192, 0.7)', // Ivan
+                            'rgba(75, 192, 192, 0.7)', // Ivan2
+                            'rgba(75, 192, 192, 0.7)', // Ivan3
+                            'rgba(75, 192, 192, 0.7)', // Ivan4
+                            'rgba(75, 192, 192, 0.7)', // Ivan5
+                            'rgba(153, 102, 255, 0.7)',// Carles
+                            'rgba(153, 102, 255, 0.7)',// Carles2
+                            'rgba(153, 102, 255, 0.7)',// Carles3
+                            'rgba(255, 159, 64, 0.7)', // Albert
+                            'rgba(255, 159, 64, 0.7)', // Albert2
+                            'rgba(255, 159, 64, 0.7)', // Albert3
+                            'rgba(255, 159, 64, 0.7)', // Albert4
+                            'rgba(255, 159, 64, 0.7)', // Albert5
                         ],
                         borderColor: '#ffffff',
                         borderWidth: 2
@@ -346,7 +376,7 @@
                 const chartData = {
                     labels: labels,
                     datasets: [{
-                        label: 'Nº de Partidas',
+                        label: 'Nº de Partides',
                         data: counts,
                         backgroundColor: 'rgba(65, 105, 225, 1)',
                         borderColor: 'rgba(55, 65, 81, 1)',
@@ -402,8 +432,8 @@
                 const chartData = {
                     labels: labels,
                     datasets: [
-                        { label: 'Victorias', data: sortedData.map(wb => wb.wins), backgroundColor: 'rgba(22, 163, 74, 0.7)' },
-                        { label: 'Derrotas', data: sortedData.map(wb => wb.losses), backgroundColor: 'rgba(220, 38, 38, 0.7)' },
+                        { label: 'Victories', data: sortedData.map(wb => wb.wins), backgroundColor: 'rgba(22, 163, 74, 0.7)' },
+                        { label: 'Derrotes', data: sortedData.map(wb => wb.losses), backgroundColor: 'rgba(220, 38, 38, 0.7)' },
                     ]
                 };
                 
@@ -474,23 +504,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
