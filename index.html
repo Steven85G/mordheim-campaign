@@ -138,6 +138,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // --- DATOS DE LA CAMPAÑA ---
+            // ... (Tu array warbandsData, gamesData) ...
             const warbandsData = [
                 { player: 'Gerard', name: 'Sons of Minas Mórgül', faction: 'Orkos Negros', rating: 299, wins: 4, losses: 13, notes: 'Em parlez a mi? Waaaaaagh!' },
                 { player: 'Gerard2', name: 'Whololoo', faction: 'Poseidos', rating: 459, wins: 0, losses: 0, notes: 'Inofensius seguidors del senyor de les ombres' },
@@ -165,7 +166,6 @@
                 { player: 'Albert5', name: 'Minotauro Crush', faction: 'Hombres Bestia', rating: 100, wins: 0, losses: 0, notes: 'Aparteu-vos perque nosaltres no frenem' },
             ];
             
-            // MODIFICADO: Añadido campo 'distrito'
             const gamesData = [
                 { id: 1, players: ['Gerard', 'Ivan', 'Carles', 'Albert'], district: 'El Cementerio' },
                 { id: 2, players: ['Gerard', 'Ivan', 'Carles', 'Albert'], district: 'Estatua del Conde Gotthard' },
@@ -187,26 +187,70 @@
                 { id: 18, players: ['Gerard', 'Albert2', 'Carles2', 'Victor2'], district: 'Barrio Pobre' },
                 { id: 19, players: ['Gerard5', 'Uri', 'Victor'], district: 'Puente Central' },
             ];
-
-            // --- ESTADO DE LA APLICACIÓN ---
-            let ratingChart, playerGamesChart, performanceChart, districtChart;
+    
+            // --- NUEVO ESTADO PARA JEFES DE ZONA ---
+            const BOSSES = [
+                'Roble Bestia',
+                'Conde Steinhardt',
+                'Quimera',
+                "Be'lakor"
+            ];
+    
+            // Definimos el estado inicial
+            const initialBossKillsData = {
+                'Roble Bestia': null,
+                'Conde Steinhardt': null,
+                'Quimera': null,
+                "Be'lakor": null,
+            };
+    
+            // Función para cargar los datos del localStorage o usar el estado inicial
+            function loadBossKills() {
+                try {
+                    const savedData = localStorage.getItem('bossKillsData');
+                    if (savedData) {
+                        return JSON.parse(savedData);
+                    }
+                } catch (e) {
+                    console.error("Error cargando bossKillsData de localStorage:", e);
+                }
+                return initialBossKillsData;
+            }
+    
+            // Función para guardar los datos en localStorage
+            function saveBossKills(data) {
+                try {
+                    localStorage.setItem('bossKillsData', JSON.stringify(data));
+                } catch (e) {
+                    console.error("Error guardando bossKillsData en localStorage:", e);
+                }
+            }
+    
+            // Cargamos el estado al inicio
+            let bossKillsData = loadBossKills();
+    
+            // --- ESTADO Y ELEMENTOS DE LA APLICACIÓN ---
+            let ratingChart, playerGamesChart, districtChart;
             const factionFilter = document.getElementById('faction-filter');
             const tableBody = document.getElementById('warbands-table-body');
             const noResultsMessage = document.getElementById('no-results');
-
+    
             function init() {
                 populateFactionFilter();
                 factionFilter.addEventListener('change', render);
                 render();
                 initNotesCarousel();
             }
-
+    
             function render() {
                 const filteredData = getFilteredData();
                 renderTable(filteredData);
                 updateDashboardStats(filteredData);
                 renderCharts(filteredData);
+                renderBossKills(); // Aseguramos que se llama al renderizado de los Jefes
             }
+            
+            // --- FUNCIONES DE GRÁFICOS Y UTILIDADES EXISTENTES (SIN MODIFICAR) ---
             
             function getFilteredData() {
                 const selectedFaction = factionFilter.value;
@@ -215,7 +259,7 @@
                 }
                 return warbandsData.filter(wb => wb.faction === selectedFaction);
             }
-
+    
             function populateFactionFilter() {
                 const factions = [...new Set(warbandsData.map(wb => wb.faction).filter(f => f))];
                 factions.sort().forEach(faction => {
@@ -225,7 +269,7 @@
                     factionFilter.appendChild(option);
                 });
             }
-
+    
             function renderTable(data) {
                 tableBody.innerHTML = '';
                 
@@ -234,7 +278,7 @@
                     return;
                 }
                 noResultsMessage.classList.add('hidden');
-
+    
                 const sortedData = [...data].sort((a, b) => {
                     const pointsA = (a.wins * 3) + a.losses;
                     const pointsB = (b.wins * 3) + b.losses;
@@ -244,7 +288,7 @@
                     }
                     return b.wins - a.wins;
                 });
-
+    
                 sortedData.forEach((wb, index) => {
                     const points = (wb.wins * 3) + wb.losses;
                     const row = document.createElement('tr');
@@ -273,7 +317,7 @@
                 
                 let totalGames;
                 const selectedFaction = factionFilter.value;
-
+    
                 if (selectedFaction === 'all') {
                     totalGames = gamesData.length;
                 } else {
@@ -288,60 +332,53 @@
                 document.getElementById('total-games').textContent = totalGames;
                 document.getElementById('avg-rating').textContent = avgRating;
             }
-
+    
             function renderCharts(data) {
                 renderPlayerGamesChart(warbandsData);
                 renderRatingChart(data.filter(wb => wb.name && wb.rating > 0));
-                renderPerformanceChart(data.filter(wb => wb.name && (wb.wins > 0 || wb.losses > 0)));
                 renderDistrictChart();
             }
             
-            // MODIFICADO: Cambiado a gráfico circular (doughnut)
             function renderPlayerGamesChart(data) {
                 const playerData = data.map(wb => ({
                     player: wb.player,
                     games: wb.wins + wb.losses
                 }));
-
-                const labels = playerData.map(p => p.player);
-                const counts = playerData.map(p => p.games);
-
+    
+                const playerNames = [...new Set(data.map(wb => wb.player.replace(/\d+$/, '')))];
+                const playerGamesMap = playerData.reduce((acc, p) => {
+                    const baseName = p.player.replace(/\d+$/, '');
+                    acc[baseName] = (acc[baseName] || 0) + p.games;
+                    return acc;
+                }, {});
+    
+                const labels = playerNames.filter(name => playerGamesMap[name] > 0);
+                const counts = labels.map(name => playerGamesMap[name]);
+    
+                const BASE_COLORS = {
+                    'Gerard': 'rgba(255, 99, 132, 1)', 
+                    'Uri': 'rgba(54, 162, 235, 1)',   
+                    'Víctor': 'rgba(255, 206, 86, 1)', 
+                    'Ivan': 'rgba(75, 192, 192, 1)', 
+                    'Carles': 'rgba(153, 102, 255, 1)',
+                    'Albert': 'rgba(255, 159, 64, 1)',
+                    'default': 'rgba(128, 128, 128, 1)' 
+                };
+    
+                const backgroundColors = labels.map(name => BASE_COLORS[name] || BASE_COLORS['default']);
+    
+    
                 const chartData = {
                     labels: labels,
                     datasets: [{
                         label: 'Partides Jugades',
                         data: counts,
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.7)', // Gerard
-                            'rgba(255, 99, 132, 0.7)', // Gerard2
-                            'rgba(255, 99, 132, 0.7)', // Gerard3
-                            'rgba(255, 99, 132, 0.7)', // Gerard4
-                            'rgba(255, 99, 132, 0.7)', // Gerard5
-                            'rgba(54, 162, 235, 0.7)', // Uri
-                            'rgba(54, 162, 235, 0.7)', // Uri2
-                            'rgba(54, 162, 235, 0.7)', // Uri3
-                            'rgba(255, 206, 86, 0.7)', // Víctor
-                            'rgba(255, 206, 86, 0.7)', // Víctor2
-                            'rgba(255, 206, 86, 0.7)', // Víctor3
-                            'rgba(75, 192, 192, 0.7)', // Ivan
-                            'rgba(75, 192, 192, 0.7)', // Ivan2
-                            'rgba(75, 192, 192, 0.7)', // Ivan3
-                            'rgba(75, 192, 192, 0.7)', // Ivan4
-                            'rgba(75, 192, 192, 0.7)', // Ivan5
-                            'rgba(153, 102, 255, 0.7)',// Carles
-                            'rgba(153, 102, 255, 0.7)',// Carles2
-                            'rgba(153, 102, 255, 0.7)',// Carles3
-                            'rgba(255, 159, 64, 0.7)', // Albert
-                            'rgba(255, 159, 64, 0.7)', // Albert2
-                            'rgba(255, 159, 64, 0.7)', // Albert3
-                            'rgba(255, 159, 64, 0.7)', // Albert4
-                            'rgba(255, 159, 64, 0.7)', // Albert5
-                        ],
+                        backgroundColor: backgroundColors,
                         borderColor: '#ffffff',
                         borderWidth: 2
                     }]
                 };
-
+    
                 if (playerGamesChart) playerGamesChart.destroy();
                 playerGamesChart = new Chart(document.getElementById('player-games-chart'), {
                     type: 'doughnut',
@@ -361,7 +398,7 @@
                     }
                 });
             }
-
+    
             function renderDistrictChart() {
                 const districtCounts = gamesData.reduce((acc, game) => {
                     if (game.district) {
@@ -372,7 +409,7 @@
                 const sortedDistricts = Object.entries(districtCounts).sort(([,a],[,b]) => b-a);
                 const labels = sortedDistricts.map(([district]) => district);
                 const counts = sortedDistricts.map(([,count]) => count);
-
+    
                 const chartData = {
                     labels: labels,
                     datasets: [{
@@ -383,7 +420,7 @@
                         borderWidth: 1
                     }]
                 };
-
+    
                 if (districtChart) districtChart.destroy();
                 districtChart = new Chart(document.getElementById('district-chart'), {
                     type: 'bar',
@@ -397,7 +434,7 @@
                     }
                 });
             }
-
+    
             function renderRatingChart(data) {
                 const sortedData = [...data].sort((a, b) => b.rating - a.rating);
                 const labels = sortedData.map(wb => wb.name);
@@ -426,81 +463,111 @@
                 });
             }
             
-            function renderPerformanceChart(data) {
-                const sortedData = [...data].sort((a,b) => (b.wins - b.losses) - (a.wins - a.losses)).slice(0, 5);
-                const labels = sortedData.map(wb => wb.name || wb.player);
-                const chartData = {
-                    labels: labels,
-                    datasets: [
-                        { label: 'Victories', data: sortedData.map(wb => wb.wins), backgroundColor: 'rgba(22, 163, 74, 0.7)' },
-                        { label: 'Derrotes', data: sortedData.map(wb => wb.losses), backgroundColor: 'rgba(220, 38, 38, 0.7)' },
-                    ]
-                };
+            // --- FUNCIONES MODIFICADAS PARA JEFES DE ZONA CON LOCALSTORAGE ---
+    
+            function renderBossKills() {
+                const tableBody = document.getElementById('boss-kills-table-body');
+                tableBody.innerHTML = '';
                 
-                if (performanceChart) performanceChart.destroy();
-                performanceChart = new Chart(document.getElementById('performance-chart'), {
-                    type: 'bar',
-                    data: chartData,
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { position: 'bottom' } },
-                        scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } } }
-                    }
+                BOSSES.forEach(boss => {
+                    const killer = bossKillsData[boss];
+                    const row = document.createElement('tr');
+                    row.className = 'bg-white border-b hover:bg-stone-50';
+                    row.innerHTML = `
+                        <td class="px-4 py-3 font-semibold text-stone-900">${boss}</td>
+                        <td class="px-4 py-3 text-center font-bold ${killer ? 'text-green-600' : 'text-red-500'}">
+                            ${killer || 'VIU'}
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
                 });
             }
+    
+            window.editBossKill = function() {
+                const bossList = BOSSES.join(', ');
+                const bossToEdit = prompt(`Escriu el nom del Jefe de Zona a actualitzar: (${bossList})`);
+    
+                if (bossToEdit && BOSSES.includes(bossToEdit)) {
+                    const currentKiller = bossKillsData[bossToEdit];
+                    
+                    let newKiller = prompt(`Introdueix el nom de la Banda que ha eliminat a ${bossToEdit}.\n\n(Deixa-ho buit per marcar-lo com a VIU)`);
+                    
+                    // Si newKiller es null (cancelar) o una cadena vacía (marcar como vivo), usa null.
+                    newKiller = newKiller ? newKiller.trim() : null;
+    
+                    if (newKiller === currentKiller) {
+                        alert(`El Jefe ${bossToEdit} ja té el valor "${currentKiller || 'VIU'}". No s'han fet canvis.`);
+                        return;
+                    }
+    
+                    // 1. Actualizar el estado en memoria
+                    bossKillsData[bossToEdit] = newKiller;
+                    
+                    // 2. Guardar el nuevo estado en localStorage
+                    saveBossKills(bossKillsData);
+    
+                    // 3. Volver a renderizar la tabla para mostrar los cambios
+                    renderBossKills();
+                    alert(`El Jefe ${bossToEdit} ha estat actualitzat. Nova Banda Eliminadora: ${newKiller || 'VIU'}`);
+    
+                } else if (bossToEdit) {
+                    alert(`El nom del Jefe de Zona no és vàlid. Els Jefes són: ${bossList}`);
+                }
+            }
             
+            // --- FUNCIONES DE CARRUSEL EXISTENTES (SIN MODIFICAR) ---
             function shuffleArray(array) {
-                for (let i = array.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [array[i], array[j]] = [array[j], array[i]];
-                }
-                return array;
-            }
-            
-            function initNotesCarousel() {
-                const notes = warbandsData
-                    .filter(wb => wb.notes && wb.notes.trim() !== '')
-                    .map(wb => ({ note: wb.notes, warband: wb.name }));
-                
-                if (notes.length === 0) return;
-
-                const shuffledNotes = shuffleArray(notes);
-                const displayElement = document.getElementById('note-display');
-                const noteP = document.getElementById('current-note');
-                const warbandP = document.getElementById('current-warband');
-                let currentIndex = 0;
-                const intervalTime = 120000; // 2 minutos en milisegundos
-
-                function showNextNote() {
-                    // Fade out
-                    displayElement.style.opacity = 0;
-
-                    setTimeout(() => {
-                        // Update content
-                        const currentNoteData = shuffledNotes[currentIndex];
-                        noteP.textContent = `"${currentNoteData.note}"`;
-                        warbandP.textContent = `- ${currentNoteData.warband}`;
-
-                        // Fade in
-                        displayElement.style.opacity = 1;
-                        
-                        // Increment index, loop to start, and re-shuffle if necessary
-                        currentIndex++;
-                        if (currentIndex >= shuffledNotes.length) {
-                            currentIndex = 0;
-                            shuffleArray(shuffledNotes); // Re-shuffle for a new random order
-                        }
-                    }, 1000); // Wait for the fade out transition (1000ms from CSS)
-                }
-
-                // Start the carousel immediately, then set the interval
-                showNextNote();
-                setInterval(showNextNote, intervalTime);
-            }
-
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+            
+            function initNotesCarousel() {
+                const notes = warbandsData
+                    .filter(wb => wb.notes && wb.notes.trim() !== '')
+                    .map(wb => ({ note: wb.notes, warband: wb.name }));
+                
+                if (notes.length === 0) return;
+    
+                const shuffledNotes = shuffleArray(notes);
+                const displayElement = document.getElementById('note-display');
+                const noteP = document.getElementById('current-note');
+                const warbandP = document.getElementById('current-warband');
+                let currentIndex = 0;
+                const intervalTime = 120000; // 2 minutos en milisegundos
+    
+                function showNextNote() {
+                    // Fade out
+                    displayElement.style.opacity = 0;
+    
+                    setTimeout(() => {
+                        // Update content
+                        const currentNoteData = shuffledNotes[currentIndex];
+                        noteP.textContent = `"${currentNoteData.note}"`;
+                        warbandP.textContent = `- ${currentNoteData.warband}`;
+    
+                        // Fade in
+                        displayElement.style.opacity = 1;
+                        
+                        // Increment index, loop to start, and re-shuffle if necessary
+                        currentIndex++;
+                        if (currentIndex >= shuffledNotes.length) {
+                            currentIndex = 0;
+                            shuffleArray(shuffledNotes); // Re-shuffle for a new random order
+                        }
+                    }, 1000); // Wait for the fade out transition (1000ms from CSS)
+                }
+    
+                // Start the carousel immediately, then set the interval
+                showNextNote();
+                setInterval(showNextNote, intervalTime);
+            }
+    
             init();
         });
     </script>
 </body>
 </html>
+
