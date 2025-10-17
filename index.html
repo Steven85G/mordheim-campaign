@@ -87,7 +87,7 @@
             <aside class="space-y-6 sm:space-y-8">
                 <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
                     <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-4">Estadístiques de la Campanya</h3>
-                    <p class="text-xs sm:text-sm text-stone-800 mb-4">Resum visual de l'estat de la campanya. Fes servir el filtre per explorar per tipus de banda.</p>
+                    <p class="text-xs sm:text-sm text-stone-800 mb-4">Resum de la campanya. Fes servir el filtre per explorar per tipus de banda.</p>
                     <div class="grid grid-cols-2 gap-3 sm:gap-4 text-center">
                         <div class="bg-stone-50 p-3 rounded-lg">
                             <p class="text-xl sm:text-2xl font-bold text-blue-700" id="total-warbands">-</p>
@@ -112,14 +112,14 @@
                 </div>
 
                 <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Ranking per Valor de Banda</h3>
+                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Top 10 Valor de Banda</h3>
                     <div class="chart-container">
                         <canvas id="rating-chart"></canvas>
                     </div>
                 </div>
                 
                 <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Top 5 Rendiment en Batalla</h3>
+                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Top 10 Rendiment en Batalla</h3>
                     <div class="chart-container">
                         <canvas id="performance-chart"></canvas>
                     </div>
@@ -146,7 +146,7 @@
                 { player: 'Gerard5', name: 'Zaraky Sons', faction: 'Bárbaros del Caos', rating: 283, wins: 0, losses: 1, notes: 'Només el camí de la sang et porta al nirvana imbécil' },
                 { player: 'Uri', name: 'Garrapatos Kaos Style', faction: 'Góblins', rating: 111, wins: 0, losses: 1, notes: 'La casa es en flames, is fine' },
                 { player: 'Uri2', name: 'Rebenta Flancs', faction: 'Hombres Bestia', rating: 150, wins: 0, losses: 0, notes: 'Mireu cap aquí que així no veureu que passa per allà' },
-                { player: 'Uri3', name: 'Els Robavides', faction: 'Muertos Sin Descanso', rating: 150, wins: 0, losses: 0, notes: 'Et robo la vida i marxo, em persegueixes et robo una altre vida i torno a marxar' },
+                { player: 'Uri3', name: 'Robavides', faction: 'Muertos Sin Descanso', rating: 150, wins: 0, losses: 0, notes: 'Et robo la vida i marxo, em persegueixes et robo una altre vida i torno a marxar' },
                 { player: 'Víctor', name: 'Tribu Trencaossos', faction: 'Ogros', rating: 190, wins: 2, losses: 7, notes: 'Abracem arbres... Per matar-te amb ells!' },
                 { player: 'Víctor2', name: 'La Pitjor Generació', faction: 'Piratas', rating: 159, wins: 0, losses: 2, notes: 'Els meus tresors? El Zoro sap on son, que ell us guïi' },
                 { player: 'Víctor3', name: 'Secta de Malekiz', faction: 'Elfos Oscuros', rating: 400, wins: 0, losses: 0, notes: 'Vine, et vui comentar algo en aquell racó darrere aquella ombra gens sospitosa' },
@@ -399,7 +399,9 @@
             }
 
             function renderRatingChart(data) {
-                const sortedData = [...data].sort((a, b) => b.rating - a.rating);
+                // Ordenar de mayor a menor rating y tomar los primeros 10
+                const sortedData = [...data].sort((a, b) => b.rating - a.rating).slice(0, 10);
+                
                 const labels = sortedData.map(wb => wb.name);
                 const ratings = sortedData.map(wb => wb.rating);
                 const chartData = {
@@ -427,7 +429,14 @@
             }
             
             function renderPerformanceChart(data) {
-                const sortedData = [...data].sort((a,b) => (b.wins - b.losses) - (a.wins - a.losses)).slice(0, 5);
+                // Ordenar: 1. Por Victorias (descendente). 2. Por Derrotas (ascendente).
+                const sortedData = [...data].sort((a,b) => {
+                    if (b.wins !== a.wins) {
+                        return b.wins - a.wins; // Priorizar más victorias
+                    }
+                    return a.losses - b.losses; // Desempate: menos derrotas
+                }).slice(0, 10); // Tomar solo el Top 10
+                
                 const labels = sortedData.map(wb => wb.name || wb.player);
                 const chartData = {
                     labels: labels,
@@ -436,7 +445,7 @@
                         { label: 'Derrotes', data: sortedData.map(wb => wb.losses), backgroundColor: 'rgba(220, 38, 38, 0.7)' },
                     ]
                 };
-                
+                        
                 if (performanceChart) performanceChart.destroy();
                 performanceChart = new Chart(document.getElementById('performance-chart'), {
                     type: 'bar',
@@ -504,6 +513,7 @@
     </script>
 </body>
 </html>
+
 
 
 
