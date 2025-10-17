@@ -429,20 +429,27 @@
             }
             
             function renderPerformanceChart(data) {
-                // Ordenar: 1. Por Victorias (descendente). 2. Por Derrotas (ascendente).
-                const sortedData = [...data].sort((a,b) => {
+                // 1. Filtrar bandas con al menos 1 victoria
+                const activeData = data.filter(wb => wb.wins > 0);
+        
+                // 2. Ordenar: 1. Por Victorias (descendente). 2. Por Derrotas (ascendente) (Mantenemos el desempate por si hay empate de victorias en el top)
+                const sortedData = [...activeData].sort((a,b) => {
                     if (b.wins !== a.wins) {
                         return b.wins - a.wins; // Priorizar más victorias
                     }
                     return a.losses - b.losses; // Desempate: menos derrotas
-                }).slice(0, 10); // Tomar solo el Top 10
+                }).slice(0, 10); // Tomar solo el Top 10 (que no excederá el número de bandas con victorias)
                 
                 const labels = sortedData.map(wb => wb.name || wb.player);
                 const chartData = {
                     labels: labels,
                     datasets: [
-                        { label: 'Victories', data: sortedData.map(wb => wb.wins), backgroundColor: 'rgba(22, 163, 74, 0.7)' },
-                        { label: 'Derrotes', data: sortedData.map(wb => wb.losses), backgroundColor: 'rgba(220, 38, 38, 0.7)' },
+                        { 
+                            label: 'Victories', 
+                            data: sortedData.map(wb => wb.wins), 
+                            backgroundColor: 'rgba(22, 163, 74, 0.7)' // Solo victorias
+                        }
+                        // SE ELIMINA EL DATASET DE DERROTAS
                     ]
                 };
                         
@@ -453,8 +460,17 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { position: 'bottom' } },
-                        scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } } }
+                        plugins: { legend: { display: false } }, // Ocultar leyenda porque solo hay 1 barra
+                        scales: { 
+                            x: { 
+                                beginAtZero: true, 
+                                ticks: { stepSize: 1 } 
+                            }, 
+                            y: { 
+                                // Se elimina el 'stacked: true' porque ya no hay apilamiento
+                                beginAtZero: true
+                            } 
+                        }
                     }
                 });
             }
@@ -513,6 +529,7 @@
     </script>
 </body>
 </html>
+
 
 
 
