@@ -139,28 +139,28 @@
         document.addEventListener('DOMContentLoaded', function () {
             // --- DATOS DE LA CAMPAÑA ---
             const warbandsData = [
-                { player: 'Gerard', name: 'Sons of Minas Mórgül', faction: 'Orkos Negros', rating: 299, wins: 4, losses: 13, notes: 'Em parlez a mi? Waaaaaagh!' },
+                { player: 'Gerard', name: 'Sons of Minas Mórgül', faction: 'Orkos Negros', rating: 299, wins: 4, losses: 14, notes: 'Em parlez a mi? Waaaaaagh!' },
                 { player: 'Gerard2', name: 'Whololoo', faction: 'Poseidos', rating: 459, wins: 0, losses: 0, notes: 'Inofensius seguidors del senyor de les ombres' },
-                { player: 'Gerard3', name: 'Norses', faction: 'Exploradores Nórdicos', rating: 352, wins: 0, losses: 0, notes: 'Només et robarem una mica, potser et matem i ens fotem tot beure que porteu' },
+                { player: 'Gerard3', name: 'Norses', faction: 'Exploradores Nórdicos', rating: 352, wins: 0, losses: 1, notes: 'Només et robarem una mica, potser et matem i ens fotem tot beure que porteu' },
                 { player: 'Gerard4', name: 'Wich Hunters', faction: 'Cazadores de Brujas', rating: 327, wins: 0, losses: 0, notes: 'Magia? A la fogueraa! St Joan is a nice day' },
                 { player: 'Gerard5', name: 'Zaraky Sons', faction: 'Bárbaros del Caos', rating: 283, wins: 0, losses: 1, notes: 'Només el camí de la sang et porta al nirvana imbécil' },
                 { player: 'Uri', name: 'Garrapatos Kaos Style', faction: 'Góblins', rating: 111, wins: 0, losses: 1, notes: 'La casa es en flames, is fine' },
                 { player: 'Uri2', name: 'Rebenta Flancs', faction: 'Hombres Bestia', rating: 150, wins: 0, losses: 0, notes: 'Mireu cap aquí que així no veureu que passa per allà' },
                 { player: 'Uri3', name: 'Robavides', faction: 'Muertos Sin Descanso', rating: 150, wins: 0, losses: 0, notes: 'Et robo la vida i marxo, em persegueixes et robo una altre vida i torno a marxar' },
-                { player: 'Víctor', name: 'Tribu Trencaossos', faction: 'Ogros', rating: 190, wins: 2, losses: 7, notes: 'Abracem arbres... Per matar-te amb ells!' },
-                { player: 'Víctor2', name: 'La Pitjor Generació', faction: 'Piratas', rating: 159, wins: 0, losses: 2, notes: 'Els meus tresors? El Zoro sap on son, que ell us guïi' },
+                { player: 'Víctor', name: 'Tribu Trencaossos', faction: 'Ogros', rating: 190, wins: 2, losses: 8, notes: 'Abracem arbres... Per matar-te amb ells!' },
+                { player: 'Víctor2', name: 'La Pitjor Generació', faction: 'Piratas', rating: 159, wins: 0, losses: 4, notes: 'Els meus tresors? El Zoro sap on son, que ell us guïi' },
                 { player: 'Víctor3', name: 'Secta de Malekiz', faction: 'Elfos Oscuros', rating: 400, wins: 0, losses: 0, notes: 'Vine, et vui comentar algo en aquell racó darrere aquella ombra gens sospitosa' },
-                { player: 'Ivan', name: 'Garden Circus', faction: 'Feria Ambulante del Caos', rating: 229, wins: 6, losses: 2, notes: 'Som bona gent, però potser mors durant les funcions' },
+                { player: 'Ivan', name: 'Garden Circus', faction: 'Feria Ambulante del Caos', rating: 229, wins: 7, losses: 2, notes: 'Som bona gent, però potser mors durant les funcions' },
                 { player: 'Ivan2', name: 'Barbes Llargues', faction: 'Enanos', rating: 360, wins: 0, losses: 0, notes: 'Hem vingut a cobrar-nos agrabis, però multiplicats per mil' },
                 { player: 'Ivan3', name: 'Lady Von Carstein', faction: 'No Muertos', rating: 295, wins: 0, losses: 0, notes: 'Les caricies de la nostra Vampira et deixaràn garratibat' },
                 { player: 'Ivan4', name: 'Valhalla', faction: 'Exploradores Nórdicos', rating: 316, wins: 0, losses: 0, notes: 'Destrals, escuts i enemics, no necessitem més' },
                 { player: 'Ivan5', name: 'Pestilens', faction: 'Skavens', rating: 178, wins: 0, losses: 0, notes: 'Correm com rates però algún dia aguantarem més que els nans' },
                 { player: 'Carles', name: 'Tripielfs', faction: 'Elfos Oscuros', rating: 435, wins: 0, losses: 0, notes: 'Som de fiar tranquils, però passeu vosaltres al davant' },
-                { player: 'Carles2', name: 'Gladiators Rage', faction: 'Luchadores del Pozo', rating: 241, wins: 3, losses: 2, notes: 'Ara que ja som lliures... Ja podeu començar a correr!' },
-                { player: 'Carles3', name: 'Cola Filosas Eshin', faction: 'Skavens', rating: 200, wins: 0, losses: 0, notes: 'Lluitar? Aneu passant que nosaltres ara venim...' },
-                { player: 'Albert', name: 'Desamparats', faction: 'No Muertos', rating: 262, wins: 3, losses: 6, notes: 'Esteu tots convidats a sopar... No cal que porteu res...' },
-                { player: 'Albert2', name: 'Crazy Catai Warriors', faction: 'Monges Gerreros de Catai', rating: 253, wins: 0, losses: 5, notes: 'Aloz tles delicies? Atrapam si pots' },
-                { player: 'Albert3', name: 'Clan Escut de Roure', faction: 'Enanos', rating: 278, wins: 0, losses: 0, notes: 'Anem a poc a poc, però procura que no deixar-te veure' },
+                { player: 'Carles2', name: 'Gladiators Rage', faction: 'Luchadores del Pozo', rating: 300, wins: 3, losses: 3, notes: 'Ara que ja som lliures... Ja podeu començar a correr!' },
+                { player: 'Carles3', name: 'Cola Filosas Eshin', faction: 'Skavens', rating: 137, wins: 0, losses: 1, notes: 'Lluitar? Aneu passant que nosaltres ara venim...' },
+                { player: 'Albert', name: 'Desamparats', faction: 'No Muertos', rating: 262, wins: 3, losses: 7, notes: 'Esteu tots convidats a sopar... No cal que porteu res...' },
+                { player: 'Albert2', name: 'Crazy Catai Warriors', faction: 'Monges Gerreros de Catai', rating: 253, wins: 1, losses: 6, notes: 'Aloz tles delicies? Atrapam si pots' },
+                { player: 'Albert3', name: 'Clan Escut de Roure', faction: 'Enanos', rating: 294, wins: 1, losses: 0, notes: 'Anem a poc a poc, però procura que no deixar-te veure' },
                 { player: 'Albert4', name: 'Liche Team', faction: 'Muertos Sin Descanso', rating: 112, wins: 0, losses: 0, notes: 'Un zombie amaga una sorpresa per tu' },
                 { player: 'Albert5', name: 'Minotauro Crush', faction: 'Hombres Bestia', rating: 100, wins: 0, losses: 0, notes: 'Aparteu-vos perque nosaltres no frenem' },
             ];
@@ -185,7 +185,11 @@
                 { id: 16, players: ['Gerard', 'Albert2', 'Carles2', 'Victor'], district: 'Barrio de los Ricos' },
                 { id: 17, players: ['Victor2', 'Albert2', 'Carles2'], district: 'Barrio Pobre' },
                 { id: 18, players: ['Gerard', 'Albert2', 'Carles2', 'Victor2'], district: 'Barrio Pobre' },
-                { id: 19, players: ['Gerard5', 'Uri', 'Victor'], district: 'Puente Central' },
+                { id: 19, players: ['Gerard5', 'Uri', 'Victor'], district: 'Plaza del Verdugo' },
+                { id: 20, players: ['Gerard', 'Victor', 'Ivan', 'Albert'], district: 'Puente Medio' },
+                { id: 21, players: ['Gerard', 'Albert2', 'Carles2'], district: 'El Cementerio' },
+                { id: 22, players: ['Victor2', 'Albert2', 'Carles2'], district: 'Templo de Morr' },
+                { id: 23, players: ['Victor2', 'Albert2'], district: 'Jardines de la Memoria' },
             ];
 
             // --- ESTADO DE LA APLICACIÓN ---
@@ -529,6 +533,7 @@
     </script>
 </body>
 </html>
+
 
 
 
