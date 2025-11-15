@@ -46,16 +46,23 @@
 
         <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-            <div class="lg:col-span-2 bg-white rounded-lg shadow-md p-4 sm:p-6">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-                    <h2 class="text-xl sm:text-2xl font-bold text-blue-700 mb-3 sm:mb-0">Classificació de les Bandes</h2>
-                    <div class="flex items-center space-x-2">
-                        <label for="faction-filter" class="text-sm font-medium text-stone-600">Filtrar per tipus de Banda:</label>
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+                <h2 class="text-xl sm:text-2xl font-bold text-blue-700 mb-3 sm:mb-0">Classificació de les Bandes</h2>
+                <div class="flex items-center space-x-2 flex-wrap sm:flex-nowrap">
+                    <div class="flex items-center space-x-2 mb-2 sm:mb-0 w-full sm:w-auto">
+                        <label for="player-filter" class="text-sm font-medium text-stone-600 whitespace-nowrap">Filtrar per Jugador:</label>
+                        <select id="player-filter" class="bg-stone-50 border border-stone-300 text-stone-900 text-sm rounded-lg focus:ring-slate-500 focus:border-slate-500 block w-full sm:w-auto p-2">
+                            <option value="all">Tots els Jugadors</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center space-x-2 w-full sm:w-auto">
+                        <label for="faction-filter" class="text-sm font-medium text-stone-600 whitespace-nowrap">Filtrar per tipus de Banda:</label>
                         <select id="faction-filter" class="bg-stone-50 border border-stone-300 text-stone-900 text-sm rounded-lg focus:ring-slate-500 focus:border-slate-500 block w-full sm:w-auto p-2">
                             <option value="all">Totes les bandes</option>
                         </select>
                     </div>
                 </div>
+            </div>
 
                 <div class="overflow-x-auto">
                     <table class="min-w-full text-sm text-left text-stone-500">
@@ -205,12 +212,15 @@
             // --- ESTADO DE LA APLICACIÓN ---
             let ratingChart, playerGamesChart, performanceChart, districtChart;
             const factionFilter = document.getElementById('faction-filter');
+            const playerFilter = document.getElementById('player-filter');
             const tableBody = document.getElementById('warbands-table-body');
             const noResultsMessage = document.getElementById('no-results');
 
             function init() {
                 populateFactionFilter();
+                populatePlayerFilter(); 
                 factionFilter.addEventListener('change', render);
+                playerFilter.addEventListener('change', render);
                 render();
                 initNotesCarousel();
             }
@@ -224,10 +234,22 @@
             
             function getFilteredData() {
                 const selectedFaction = factionFilter.value;
-                if (selectedFaction === 'all') {
-                    return [...warbandsData];
+                // OBTENEMOS EL VALOR SELECCIONADO (ej. 'Gerard' o 'all')
+                const selectedPlayer = playerFilter.value; 
+                // Iniciar con todos los datos
+                let data = [...warbandsData];
+                // 1. Aplicar filtro por Facción
+                if (selectedFaction !== 'all') {
+                    data = data.filter(wb => wb.faction === selectedFaction);
                 }
-                return warbandsData.filter(wb => wb.faction === selectedFaction);
+                // 2. Aplicar filtro por Jugador
+                if (selectedPlayer !== 'all') {
+                    data = data.filter(wb => 
+                        // Filtra si el nombre del jugador INCLUYE el nombre base seleccionado (ej. 'Gerard2' incluye 'Gerard')
+                        wb.player.includes(selectedPlayer) 
+                    );
+                }
+                return data;
             }
 
             function populateFactionFilter() {
@@ -238,6 +260,25 @@
                     option.textContent = faction;
                     factionFilter.appendChild(option);
                 });
+            }
+
+            function populatePlayerFilter() {
+                // Identificamos los nombres base únicos de los jugadores (ej. 'Gerard' de 'Gerard', 'Gerard2', etc.)
+                const basePlayers = [...new Set(warbandsData.map(wb => {
+                    // Usa una expresión regular para eliminar números al final y mantener solo el nombre base
+                    return wb.player.replace(/\d+$/, ''); 
+                }))].filter(p => p).sort(); // Filtramos vacíos y ordenamos
+            
+                basePlayers.forEach(player => {
+                    const option = document.createElement('option');
+                    option.value = player;
+                    option.textContent = player;
+                    playerFilter.appendChild(option);
+                });
+                
+                // Aseguramos que los nombres que tienen variantes completas también están en la lista
+                // Por ejemplo, si un jugador se llama 'Uri' y otro 'Uri2', queremos que la opción 'Uri' filtre ambos.
+                // Esto ya se resuelve en gran parte con la lógica de arriba, pero esta línea es la base de los nombres.
             }
 
             function renderTable(data) {
@@ -544,6 +585,7 @@
     </script>
 </body>
 </html>
+
 
 
 
