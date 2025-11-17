@@ -146,11 +146,11 @@
         document.addEventListener('DOMContentLoaded', function () {
             // --- DATOS DE LA CAMPAÑA ---
             const warbandsData = [
-                { player: 'Gerard', name: 'Sons of Minas Mórgül', faction: 'Orkos Negros', rating: 347, wins: 4, losses: 15, notes: 'Em parlez a mi? Waaaaaagh!' },
-                { player: 'Gerard2', name: 'Whololoo', faction: 'Poseidos', rating: 459, wins: 0, losses: 0, notes: 'Inofensius seguidors del senyor de les ombres' },
-                { player: 'Gerard3', name: 'Norses', faction: 'Exploradores Nórdicos', rating: 378, wins: 0, losses: 1, notes: 'Només et robarem una mica, potser et matem i ens fotem tot beure que porteu' },
-                { player: 'Gerard4', name: 'Wich Hunters', faction: 'Cazadores de Brujas', rating: 374, wins: 1, losses: 2, notes: 'Magia? A la fogueraa! St Joan is a nice day' },
-                { player: 'Gerard5', name: 'Zaraky Fans', faction: 'Bárbaros del Caos', rating: 310, wins: 1, losses: 3, notes: 'Només el camí de la violéncia et porta al nirvana imbécil' },
+                { player: 'Gerard', name: 'Whololoo', faction: 'Poseidos', rating: 459, wins: 0, losses: 0, notes: 'Inofensius seguidors del senyor de les ombres' },
+                { player: 'Gerard2', name: 'Norses', faction: 'Exploradores Nórdicos', rating: 378, wins: 0, losses: 1, notes: 'Només et robarem una mica, potser et matem i ens fotem tot beure que porteu' },
+                { player: 'Gerard3', name: 'Wich Hunters', faction: 'Cazadores de Brujas', rating: 374, wins: 1, losses: 2, notes: 'Magia? A la fogueraa! St Joan is a nice day' },
+                { player: 'Gerard4', name: 'Zaraky Fans', faction: 'Bárbaros del Caos', rating: 310, wins: 1, losses: 3, notes: 'Només el camí de la violéncia et porta al nirvana imbécil' },
+                { player: 'Gerard5', name: 'Sons of Minas Mórgül', faction: 'Orkos Negros', rating: 347, wins: 4, losses: 15, notes: 'Em parlez a mi? Waaaaaagh!' },
                 { player: 'Uri', name: 'Zuertudoz de Vroligg', faction: 'Góblins', rating: 269, wins: 0, losses: 1, notes: 'La casa es en flames, is fine' },
                 { player: 'Uri2', name: 'Rebenta Flancs', faction: 'Hombres Bestia', rating: 150, wins: 0, losses: 0, notes: 'Mireu cap aquí que així no veureu que passa per allà' },
                 { player: 'Uri3', name: 'Robavides', faction: 'Muertos Sin Descanso', rating: 150, wins: 0, losses: 0, notes: 'Et robo la vida i marxo, em persegueixes et robo una altre vida i torno a marxar' },
@@ -175,40 +175,40 @@
             
             // MODIFICADO: Añadido campo 'distrito'
             const gamesData = [
-                { id: 1, players: ['Gerard', 'Ivan', 'Carles'], district: 'El Cementerio' },
-                { id: 2, players: ['Gerard', 'Ivan', 'Carles'], district: 'Estatua del Conde Gotthard' },
-                { id: 3, players: ['Gerard', 'Ivan', 'Carles', 'Taquru'], district: 'La Cárcel' },
-                { id: 4, players: ['Gerard', 'Ivan'], district: 'Muelle' },
-                { id: 5, players: ['Gerard', 'Victor'], district: 'Cuartel del Cuervo' },
-                { id: 6, players: ['Gerard', 'Victor', 'Ivan'], district: 'Pequeño Moot' },
-                { id: 7, players: ['Gerard', 'Victor'], district: 'La Cárcel' },
-                { id: 8, players: ['Gerard', 'Ivan', 'Carles', 'Taquru', 'Victor'], district: 'Plaza del Mercado' },
-                { id: 9, players: ['Gerard', 'Victor'], district: 'La Roca' },
-                { id: 10, players: ['Gerard', 'Carles'], district: 'Estatua del Conde Gotthard' },
-                { id: 11, players: ['Gerard', 'Victor'], district: 'La Cárcel' },
-                { id: 12, players: ['Gerard', 'Carles'], district: 'Plaza del Verdugo' },
-                { id: 13, players: ['Gerard', 'Albert2', 'Carles2'], district: 'Cuartel del Cuervo' },
-                { id: 14, players: ['Gerard', 'Ivan'], district: 'Anfiteatro' },
-                { id: 15, players: ['Gerard', 'Albert2', 'Carles2', 'Victor'], district: 'La Gran Biblioteca' },
-                { id: 16, players: ['Gerard', 'Albert2', 'Carles2', 'Victor'], district: 'Barrio de los Ricos' },
+                { id: 1, players: ['Gerard5', 'Ivan', 'Carles'], district: 'El Cementerio' },
+                { id: 2, players: ['Gerard5', 'Ivan', 'Carles'], district: 'Estatua del Conde Gotthard' },
+                { id: 3, players: ['Gerard5', 'Ivan', 'Carles', 'Taquru'], district: 'La Cárcel' },
+                { id: 4, players: ['Gerard5', 'Ivan'], district: 'Muelle' },
+                { id: 5, players: ['Gerard5', 'Victor'], district: 'Cuartel del Cuervo' },
+                { id: 6, players: ['Gerard5', 'Victor', 'Ivan'], district: 'Pequeño Moot' },
+                { id: 7, players: ['Gerard5', 'Victor'], district: 'La Cárcel' },
+                { id: 8, players: ['Gerard5', 'Ivan', 'Carles', 'Taquru', 'Victor'], district: 'Plaza del Mercado' },
+                { id: 9, players: ['Gerard5', 'Victor'], district: 'La Roca' },
+                { id: 10, players: ['Gerard5', 'Carles'], district: 'Estatua del Conde Gotthard' },
+                { id: 11, players: ['Gerard5', 'Victor'], district: 'La Cárcel' },
+                { id: 12, players: ['Gerard5', 'Carles'], district: 'Plaza del Verdugo' },
+                { id: 13, players: ['Gerard5', 'Albert2', 'Carles2'], district: 'Cuartel del Cuervo' },
+                { id: 14, players: ['Gerard5', 'Ivan'], district: 'Anfiteatro' },
+                { id: 15, players: ['Gerard5', 'Albert2', 'Carles2', 'Victor'], district: 'La Gran Biblioteca' },
+                { id: 16, players: ['Gerard5', 'Albert2', 'Carles2', 'Victor'], district: 'Barrio de los Ricos' },
                 { id: 17, players: ['Victor2', 'Albert2', 'Carles2'], district: 'Barrio Pobre' },
-                { id: 18, players: ['Gerard', 'Albert2', 'Carles2', 'Victor2'], district: 'Barrio Pobre' },
-                { id: 19, players: ['Gerard5', 'Uri', 'Victor'], district: 'Plaza del Verdugo' },
-                { id: 20, players: ['Gerard', 'Victor', 'Ivan'], district: 'Puente Medio' },
-                { id: 21, players: ['Gerard', 'Albert2', 'Carles2'], district: 'El Cementerio' },
+                { id: 18, players: ['Gerard5', 'Albert2', 'Carles2', 'Victor2'], district: 'Barrio Pobre' },
+                { id: 19, players: ['Gerard4', 'Uri', 'Victor'], district: 'Plaza del Verdugo' },
+                { id: 20, players: ['Gerard5', 'Victor', 'Ivan'], district: 'Puente Medio' },
+                { id: 21, players: ['Gerard5', 'Albert2', 'Carles2'], district: 'El Cementerio' },
                 { id: 22, players: ['Victor2', 'Albert2', 'Carles2'], district: 'Templo de Morr' },
                 { id: 23, players: ['Victor2', 'Albert2'], district: 'Jardines de la Memoria' },
-                { id: 24, players: ['Gerard4', 'Victor2', 'Albert3'], district: 'Barrio de los Comerciantes' },
+                { id: 24, players: ['Gerard3', 'Victor2', 'Albert3'], district: 'Barrio de los Comerciantes' },
                 { id: 25, players: ['Albert5', 'Carles3'], district: 'Templo de Morr' },
-                { id: 26, players: ['Gerard', 'Victor', 'Ivan3'], district: 'El Cementerio' },
+                { id: 26, players: ['Gerard5', 'Victor', 'Ivan3'], district: 'El Cementerio' },
                 { id: 27, players: ['Albert4', 'Carles3'], district: 'Barrio Pobre' },
-                { id: 28, players: ['Gerard5', 'Victor', 'Ivan5'], district: 'Distrito Enano' },
-                { id: 29, players: ['Gerard5', 'Victor2', 'David'], district: 'El Cementerio' },
+                { id: 28, players: ['Gerard4', 'Victor', 'Ivan5'], district: 'Distrito Enano' },
+                { id: 29, players: ['Gerard4', 'Victor2', 'David'], district: 'El Cementerio' },
                 { id: 30, players: ['Albert', 'Carles3'], district: 'Estatua del Conde Gotthard' },
                 { id: 31, players: ['Albert3', 'Carles3'], district: 'El Cementerio' },
-                { id: 32, players: ['Gerard5', 'Albert3'], district: 'La Cárcel' },
-                { id: 33, players: ['Gerard4', 'Albert4'], district: 'Barrio de los Ricos' },
-                { id: 34, players: ['Gerard4', 'Ivan4'], district: 'Anfiteatro' },
+                { id: 32, players: ['Gerard4', 'Albert3'], district: 'La Cárcel' },
+                { id: 33, players: ['Gerard3', 'Albert4'], district: 'Barrio de los Ricos' },
+                { id: 34, players: ['Gerard3', 'Ivan4'], district: 'Anfiteatro' },
                 { id: 35, players: ['Albert4', 'Carles3'], district: '' },
             ];
 
@@ -588,6 +588,7 @@
     </script>
 </body>
 </html>
+
 
 
 
