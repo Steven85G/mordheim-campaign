@@ -149,7 +149,7 @@
                 { player: 'Gerard', name: 'Darkness Shadow', faction: 'Culto de los Poseidos', rating: 459, wins: 0, losses: 0, notes: 'Inofensius seguidors del senyor de les ombres' },
                 { player: 'Gerard2', name: 'Norses', faction: 'Exploradores Nórdicos', rating: 447, wins: 1, losses: 1, notes: 'Saquejarem, matarem i ens fotrem tot el beure. Skol!' },
                 { player: 'Gerard3', name: 'Wich Hunters', faction: 'Cazadores de Brujas', rating: 374, wins: 1, losses: 2, notes: 'Magia? A la fogueraa! St Joan is a nice day' },
-                { player: 'Gerard4', name: 'Zaraky Fans', faction: 'Bárbaros del Caos', rating: 164, wins: 0, losses: 2, notes: 'Només el camí de la violéncia et porta al nirvana imbécil' },
+                { player: 'Gerard4', name: 'Zaraky Fans', faction: 'Bárbaros del Caos', rating: 203, wins: 1, losses: 2, notes: 'Només el camí de la violéncia et porta al nirvana imbécil' },
                 { player: 'Gerard5', name: 'Sons of Minas Mórgül', faction: 'Orkos Negros', rating: 350, wins: 6, losses: 16, notes: 'Em parlez a mi? Waaaaaagh!' },
                 { player: 'Uri', name: 'Zuertudoz de Vroligg', faction: 'Góblins', rating: 269, wins: 0, losses: 1, notes: 'La casa es en flames, is fine' },
                 { player: 'Uri2', name: 'Rebenta Flancs', faction: 'Hombres Bestia', rating: 150, wins: 0, losses: 0, notes: 'Mireu cap aquí que així no veureu que passa per allà' },
@@ -167,12 +167,14 @@
                 { player: 'Albert3', name: 'Clan Escut de Roure', faction: 'Enanos', rating: 337, wins: 3, losses: 1, notes: 'Anem a poc a poc, però procura no deixar-te veure' },
                 { player: 'Albert4', name: 'Liche Team', faction: 'Muertos Sin Descanso', rating: 330, wins: 0, losses: 6, notes: 'Un zombi amaga una sorpresa' },
                 { player: 'Albert5', name: 'Minotauro Crush', faction: 'Hombres Bestia', rating: 115, wins: 1, losses: 0, notes: 'Aparteu-vos perque nosaltres no frenem' },
+                { player: 'Albert6', name: 'Sangre Fria', faction: 'Hombres Lagarto', rating: 98, wins: 0, losses: 1, notes: 'Una cervatana y veneno' },
                 { player: 'Carles', name: 'Tripielfs', faction: 'Elfos Oscuros', rating: 100, wins: 0, losses: 0, notes: 'Som de fiar tranquils, però passeu vosaltres al davant' },
                 { player: 'Carles2', name: 'Gladiators Rage', faction: 'Luchadores del Pozo', rating: 300, wins: 3, losses: 3, notes: 'Ara que ja som lliures... Ja podeu començar a correr!' },
                 { player: 'Carles3', name: 'Cola Filosas Eshin', faction: 'Skavens', rating: 233, wins: 2, losses: 4, notes: 'Lluitar amb el Troll? Aneu passant que nosaltres ara venim...' },
                 { player: 'David', name: 'Martillo de Herejes', faction: 'Cazadores de Brujas', rating: 214, wins: 0, losses: 1, notes: 'Ostia aquí y ostia allá Flagélate Flagélate' },
                 { player: 'David2', name: 'Lustrianos Errantes', faction: 'Saqueadores de Lústria', rating: 164, wins: 1, losses: 2, notes: 'Sobrevivimos una vez y volveremos a hacerlo' },
                 { player: 'Alkoz', name: 'Bárbaros del Caos', faction: 'Bárbaros del Caos', rating: 171, wins: 1, losses: 1, notes: '...' },
+                { player: 'Evil', name: 'No Name', faction: 'Cazadores de Brujas', rating: 132, wins: 0, losses: 1, notes: 'Malditos herejes, purificaos con fuego!' },
             ];
             
             // MODIFICADO: Añadido campo 'distrito'
@@ -223,6 +225,7 @@
                 { id: 44, players: ['Gerard5', 'David2'], district: 'Plaza del Verdugo' },
                 { id: 45, players: ['Alkoz', 'David2'], district: 'Estatua del Conde Gotthard' },
                 { id: 46, players: ['Alkoz', 'David2'], district: 'Sala de Sabios' },
+                { id: 47, players: ['Gerard4', 'Albert6', 'Evil'], district: 'Distrito Enano' },
             ];
 
             // --- ESTADO DE LA APLICACIÓN ---
@@ -404,12 +407,14 @@
                             'rgba(255, 99, 99, 1)', // Albert3
                             'rgba(255, 99, 99, 1)', // Albert4
                             'rgba(255, 99, 99, 1)', // Albert5
+                            'rgba(255, 99, 99, 1)', // Albert6
                             'rgba(75, 192, 192, 1)',// Carles
                             'rgba(75, 192, 192, 1)',// Carles2
                             'rgba(75, 192, 192, 1)',// Carles3
                             'rgba(255, 159, 64, 1)', // David
                             'rgba(255, 159, 64, 1)', // David2
-                            'rgba(192, 61, 164, 1)', // Alkoz
+                            'rgba(128, 128, 128, 1)', // Alkoz
+                            'rgba(192, 61, 164, 1)', // Evil
                         ],
                         borderColor: '#ffffff',
                         borderWidth: 2
@@ -603,6 +608,7 @@
     </script>
 </body>
 </html>
+
 
 
 
