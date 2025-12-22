@@ -110,6 +110,13 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
+                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Top 10 Victòries</h3>
+                    <div class="chart-container">
+                        <canvas id="performance-chart"></canvas>
+                    </div>
+                </div>
                 
                 <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
                     <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Activitat dels Jugadors</h3>
@@ -126,24 +133,10 @@
                 </div>
                 
                 <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Top 10 Victòries</h3>
-                    <div class="chart-container">
-                        <canvas id="performance-chart"></canvas>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Distrctes més Disputats</h3>
-                    <div class="chart-container">
-                        <canvas id="district-chart"></canvas>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
-                    <h3 class="text-lg sm:text-xl font-bold text-red-700 mb-4">Big Boss Party</h3>
+                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-4">Big Boss Party</h3>
                     <div class="overflow-x-auto">
                         <table class="min-w-full text-sm text-left">
-                            <thead class="text-xs text-red-700 uppercase bg-red-50">
+                            <thead class="text-xs text-blue-700 uppercase bg-blue-50">
                                 <tr>
                                     <th class="px-3 py-2">Boss</th>
                                     <th class="px-3 py-2 text-center">Kills</th>
@@ -153,6 +146,13 @@
                             <tbody id="bosses-table-body">
                                 </tbody>
                         </table>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
+                    <h3 class="text-lg sm:text-xl font-bold text-blue-700 mb-2">Distrctes més Disputats</h3>
+                    <div class="chart-container">
+                        <canvas id="district-chart"></canvas>
                     </div>
                 </div>
             </aside>
@@ -209,14 +209,14 @@
             
                 bossesData.forEach(boss => {
                     const row = document.createElement('tr');
-                    row.className = 'border-b hover:bg-red-50 transition-colors';
+                    row.className = 'border-b hover:bg-blue-50 transition-colors';
                     
                     // Lógica para el estado de victoria
-                    const statusText = boss.defeats === 0 ? '<span class="text-red-600 font-bold italic">Invictus</span>' : boss.defeats;
+                    const statusText = boss.defeats === 0 ? '<span class="text-blue-600 font-bold italic">Invictus</span>' : boss.defeats;
                     const winnersText = boss.winners.length > 0 ? boss.winners.join(', ') : '-';
             
                     row.innerHTML = `
-                        <td class="px-3 py-3 font-bold text-blue-700">${boss.name}</td>
+                        <td class="px-3 py-3 font-bold text-red-700">${boss.name}</td>
                         <td class="px-3 py-3 text-center">${statusText}</td>
                         <td class="px-3 py-3 text-green-700 italic">${winnersText}</td>
                     `;
@@ -662,6 +662,7 @@
     </script>
 </body>
 </html>
+
 
 
 
