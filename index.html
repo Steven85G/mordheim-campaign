@@ -52,7 +52,7 @@
                         <div class="flex flex-col w-full sm:w-auto">
                             <label for="faction-filter" class="text-xs font-medium text-stone-600 mb-1">Filtrar per tipus de Banda:</label>
                             <select id="faction-filter" class="bg-stone-50 border border-stone-300 text-stone-900 text-sm rounded-lg p-2.5 w-full">
-                                <option value="all">Totes les bandes</option>
+                                <option value="all">Totes les Bandes</option>
                             </select>
                         </div>
                     </div>
@@ -170,7 +170,7 @@
                 { player: 'Oriol3', name: 'Robavides', faction: 'Muertos Sin Descanso', rating: 150, wins: 0, losses: 0, notes: 'Et robo la vida i marxo, em persegueixes et robo una altre vida i torno a marxar' },
                 { player: 'Víctor', name: 'Tribu Trencaossos', faction: 'Ogros', rating: 268, wins: 4, losses: 13, notes: 'Abracem arbres... Per matar-te amb ells!' },
                 { player: 'Víctor2', name: 'La Pitjor Generació', faction: 'Piratas', rating: 300, wins: 3, losses: 7, notes: 'Els meus tresors? El Zoro sap on son, que ell us hi porti' },
-                { player: 'Víctor3', name: 'Secta de Malekiz', faction: 'Elfos Oscuros', rating: 251, wins: 2, losses: 5, notes: 'Vine, et vui comentar algo en aquell racó darrere aquella ombra gens sospitosa' },
+                { player: 'Víctor3', name: 'Secta de Malekiz', faction: 'Elfos Oscuros', rating: 251, wins: 3, losses: 5, notes: 'Vine, et vui comentar algo en aquell racó darrere aquella ombra gens sospitosa' },
                 { player: 'Ivan', name: 'Garden Circus', faction: 'Feria Ambulante del Caos', rating: 264, wins: 7, losses: 5, notes: 'Som bona gent, però potser mors durant la funció' },
                 { player: 'Ivan2', name: 'Barbes Llargues', faction: 'Enanos', rating: 380, wins: 1, losses: 1, notes: 'Hem vingut a cobrar-nos agrabis, però multiplicats per mil' },
                 { player: 'Ivan3', name: 'Lady Von Carstein', faction: 'No Muertos', rating: 320, wins: 0, losses: 2, notes: 'Les caricies de la nostra Vampira et deixaràn garratibat' },
@@ -181,16 +181,17 @@
                 { player: 'Albert2', name: 'Crazy Catai Warriors', faction: 'Monges Gerreros de Catai', rating: 253, wins: 1, losses: 6, notes: 'Aloz tles delicias? Atrapam si pots' },
                 { player: 'Albert3', name: 'Clan Escut de Roure', faction: 'Enanos', rating: 337, wins: 4, losses: 1, notes: 'Anem a poc a poc, però procura no deixar-te veure' },
                 { player: 'Albert4', name: 'Liche Team', faction: 'Muertos Sin Descanso', rating: 330, wins: 1, losses: 7, notes: 'Un zombi amaga una sorpresa' },
-                { player: 'Albert5', name: 'Minotauro Crush', faction: 'Hombres Bestia', rating: 160, wins: 1, losses: 2, notes: 'Aparteu-vos perque nosaltres no frenem' },
+                { player: 'Albert5', name: 'Minotauro Crush', faction: 'Hombres Bestia', rating: 160, wins: 1, losses: 3, notes: 'Aparteu-vos perque nosaltres no frenem' },
                 { player: 'Albert6', name: 'T Rex Team', faction: 'Hombres Lagarto', rating: 331, wins: 4, losses: 5, notes: 'Una cervatana y veneno' },
                 { player: 'Carles', name: 'Tripielfs', faction: 'Elfos Oscuros', rating: 100, wins: 0, losses: 0, notes: 'Som de fiar tranquils, però passeu vosaltres al davant' },
                 { player: 'Carles2', name: 'Gladiators Rage', faction: 'Luchadores del Pozo', rating: 300, wins: 3, losses: 3, notes: 'Ara que ja som lliures... Ja podeu començar a correr!' },
                 { player: 'Carles3', name: 'Cola Filosas Eshin', faction: 'Skavens', rating: 233, wins: 2, losses: 4, notes: 'Lluitar amb el Troll? Aneu passant que nosaltres ara venim...' },
                 { player: 'David', name: 'Martillo de Herejes', faction: 'Cazadores de Brujas', rating: 269, wins: 0, losses: 3, notes: 'Ostia aquí y ostia allá Flagélate Flagélate' },
                 { player: 'David2', name: 'Lustrianos Errantes', faction: 'Saqueadores de Lústria', rating: 191, wins: 2, losses: 5, notes: 'Sobrevivimos una vez y volveremos a hacerlo' },
-                { player: 'David3', name: 'Saqueadores', faction: 'Saqueadores de Tumbas', rating: 108, wins: 0, losses: 1, notes: 'Amego Segarro?' },
+                { player: 'David3', name: 'Saqueadores', faction: 'Saqueadores de Tumbas', rating: 108, wins: 0, losses: 2, notes: 'Amego Segarro?' },
                 { player: 'Alkoz', name: 'Bárbaros', faction: 'Bárbaros del Caos', rating: 171, wins: 1, losses: 1, notes: '...' },
                 { player: 'Evil', name: 'Inquisidores de la Fe', faction: 'Cazadores de Brujas', rating: 170, wins: 1, losses: 3, notes: 'Malditos herejes, purificaos con fuego!' },
+                { player: 'Evil2', name: 'Zombies Party', faction: 'No Muertos', rating: 100, wins: 0, losses: 1, notes: 'Tu sangre pa mi, el cerebro para ellos' },
             ];
 
             // --- DATOS DE LOS JEFES ---
@@ -293,6 +294,7 @@
                 { id: 66, players: ['Gerard3', 'Victor', 'Albert4', 'Ivan2'], district: 'Trolls Hunter' },
                 { id: 67, players: ['Gerard4', 'Albert5'], district: 'Barrio de los Comerciantes' },
                 { id: 68, players: ['Gerard3', 'Albert5'], district: 'Pequeño Moot' },
+                { id: 69, players: ['Evil2', 'Víctor3', 'Albert5', 'David3'], district: 'La Cárcel' },
             ];
 
             // --- ESTADO DE LA APLICACIÓN ---
@@ -719,6 +721,7 @@
     </script>
 </body>
 </html>
+
 
 
 
